@@ -7,7 +7,7 @@
 <meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators and Framer plugins. Free, open source, no accounts.">
 <meta property="og:title" content="Toolbox — Sanna Granqvist">
 <meta property="og:description" content="Small, sharp tools for design work. Free, open source, no accounts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230f0f0f%22/><text x=%2232%22 y=%2244%22 font-size=%2236%22 text-anchor=%22middle%22>🧰</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230f0f0f%22/><rect x=%2220%22 y=%2220%22 width=%2224%22 height=%2224%22 rx=%227%22 fill=%22%23f2f2f2%22/></svg>">
 <link rel="stylesheet" href="https://granqvistsanna-web.github.io/graphite-console/tokens.css">
 <style>
   /* Graphite Console — https://granqvistsanna-web.github.io/graphite-console/ */
@@ -26,18 +26,13 @@
   .page { max-width: 1060px; margin: 0 auto; padding: 72px 28px 96px; }
 
   /* ---- Header ---- */
-  .eyebrow {
-    font-size: 11px; font-weight: 600; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--ink-low);
-  }
   h1 {
     color: var(--ink-hi);
     font-size: clamp(34px, 5vw, 52px);
     font-weight: 700; letter-spacing: -0.02em; line-height: 1.05;
-    margin: 14px 0 18px; text-wrap: balance;
+    margin: 0 0 16px; text-wrap: balance;
   }
   .lede { max-width: 62ch; color: var(--ink-mid); font-size: 16px; margin: 0; }
-  .lede strong { color: var(--ink-hi); font-weight: 600; }
 
   section { margin-top: 72px; }
   .sec-label {
@@ -154,12 +149,16 @@
   }
   footer .flink:hover { color: var(--ink-hi); }
   footer .flink svg.ph { width: 15px; height: 15px; }
+  footer .byline { color: var(--ink-mid); font-weight: 500; }
+  footer .flink:first-of-type { margin-left: auto; }
 
   @media (max-width: 720px) {
     .page { padding-top: 48px; }
     .prow { flex-wrap: wrap; row-gap: 2px; padding-block: 14px; }
     .prow .pdesc { flex-basis: 100%; order: 4; white-space: normal; padding-left: 32px; }
     .prow .pkind { margin-left: auto; }
+    footer .byline { flex-basis: 100%; }
+    footer .flink:first-of-type { margin-left: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0.01ms !important; }
@@ -188,11 +187,8 @@
 <div class="page">
 
   <header>
-    <div class="eyebrow">Sanna Granqvist</div>
     <h1>Toolbox</h1>
-    <p class="lede">Small, sharp tools for design work — palettes, screenshots, image
-    conversion, pricing. Everything here is <strong>free and open source</strong>, runs
-    in the browser or your terminal, and asks for no accounts.</p>
+    <p class="lede">Tools for design work. Free, open source, no accounts.</p>
   </header>
 
   <!-- ================= TOOLS ================= -->
@@ -203,9 +199,7 @@
       <article class="card">
         <div class="tile"><svg class="ph"><use href="#i-swatches"/></svg></div>
         <h3><a href="https://granqvistsanna-web.github.io/colorbook/">Colourbook <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>A filterable library of 202 color palettes. Click any band to copy its hex,
-        export palettes as CSS, SCSS, Tailwind or JSON — or build a full brand scheme
-        with a core color, accents and a neutral scale.</p>
+        <p>202 color palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p>
         <div class="meta">
           <span class="kind">Web app</span>
           <a class="src" href="https://github.com/granqvistsanna-web/colorbook"><svg class="ph"><use href="#i-github"/></svg>Source</a>
@@ -215,9 +209,7 @@
       <article class="card">
         <div class="tile"><svg class="ph"><use href="#i-image"/></svg></div>
         <h3><a href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Drop in PNGs and JPGs, get lean WebP files out. Per-image quality control,
-        size savings at a glance, and a download-all bar. Everything runs client-side —
-        files never leave your machine.</p>
+        <p>Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
         <div class="meta">
           <span class="kind">Web app</span>
           <a class="src" href="https://github.com/granqvistsanna-web/image-compressor"><svg class="ph"><use href="#i-github"/></svg>Source</a>
@@ -227,8 +219,7 @@
       <article class="card">
         <div class="tile"><svg class="ph"><use href="#i-camera"/></svg></div>
         <h3><a href="https://granqvistsanna-web.github.io/frameshot/">Frameshot <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Clean, retina-quality screenshots of Framer sites. A local CLI on Node and
-        Playwright — point it at a site and drive it from a browser UI or a YAML config.</p>
+        <p>Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
         <div class="meta">
           <span class="kind">CLI · Node</span>
           <a class="src" href="https://github.com/granqvistsanna-web/frameshot"><svg class="ph"><use href="#i-github"/></svg>Source</a>
@@ -238,9 +229,7 @@
       <article class="card">
         <div class="tile"><svg class="ph"><use href="#i-stack"/></svg></div>
         <h3><a href="https://granqvistsanna-web.github.io/graphite-console/">Graphite Console <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>The design system this page is set in — a monochrome, dark-only control-surface
-        system. One grayscale ladder, one inverse accent, one row height. Link
-        <code>tokens.css</code> and build.</p>
+        <p>The monochrome dark design system this page is set in. Link the tokens and build.</p>
         <div class="meta">
           <span class="kind">Design system</span>
           <a class="src" href="https://github.com/granqvistsanna-web/graphite-console"><svg class="ph"><use href="#i-github"/></svg>Source</a>
@@ -250,8 +239,7 @@
       <article class="card">
         <div class="tile"><svg class="ph"><use href="#i-calc"/></svg></div>
         <h3><a href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Work out a freelance hourly rate and price projects with confidence — from
-        costs and working days to a verdict on any quote. A single HTML file, no build step.</p>
+        <p>Work out a freelance hourly rate and sanity-check any project quote.</p>
         <div class="meta">
           <span class="kind">Web app</span>
           <a class="src" href="https://github.com/granqvistsanna-web/pricing"><svg class="ph"><use href="#i-github"/></svg>Source</a>
@@ -269,7 +257,7 @@
       <a class="prow" href="https://github.com/granqvistsanna-web/bandwidth-plugin">
         <svg class="ph picon"><use href="#i-gauge"/></svg>
         <span class="pname">Bandwidth</span>
-        <span class="pdesc">Page-weight analysis for Framer projects — scans every asset, flags heavy files, suggests fixes</span>
+        <span class="pdesc">Page-weight analysis — flags heavy assets and suggests fixes</span>
         <span class="pkind">Framer</span>
         <svg class="ph parrow"><use href="#i-arrow"/></svg>
       </a>
@@ -277,7 +265,7 @@
       <a class="prow" href="https://github.com/granqvistsanna-web/motion-curve">
         <svg class="ph picon"><use href="#i-wave"/></svg>
         <span class="pname">Motion Curve</span>
-        <span class="pdesc">Bezier curve editor for dialing in Framer animation easing</span>
+        <span class="pdesc">Bezier curve editor for animation easing</span>
         <span class="pkind">Framer</span>
         <svg class="ph parrow"><use href="#i-arrow"/></svg>
       </a>
@@ -285,7 +273,7 @@
       <a class="prow" href="https://github.com/granqvistsanna-web/pomodoro">
         <svg class="ph picon"><use href="#i-timer"/></svg>
         <span class="pname">Pomodoro</span>
-        <span class="pdesc">A pomodoro-style focus timer that lives inside Framer</span>
+        <span class="pdesc">Pomodoro-style focus timer</span>
         <span class="pkind">Framer</span>
         <svg class="ph parrow"><use href="#i-arrow"/></svg>
       </a>
@@ -293,7 +281,7 @@
       <a class="prow" href="https://github.com/granqvistsanna-web/framer-audit-plugin">
         <svg class="ph picon"><use href="#i-magnify"/></svg>
         <span class="pname">Framer Audit</span>
-        <span class="pdesc">Read-only design-QA audit with suggested fixes for Framer projects</span>
+        <span class="pdesc">Read-only design-QA audit with suggested fixes</span>
         <span class="pkind">Claude Code</span>
         <svg class="ph parrow"><use href="#i-arrow"/></svg>
       </a>
@@ -302,6 +290,7 @@
   </section>
 
   <footer>
+    <span class="byline">Sanna Granqvist</span>
     <a class="flink" href="https://github.com/granqvistsanna-web"><svg class="ph"><use href="#i-github"/></svg>GitHub</a>
     <a class="flink" href="https://www.linkedin.com/in/sanna-granqvist-66b45ab7"><svg class="ph"><use href="#i-linkedin"/></svg>LinkedIn</a>
     <a class="flink" href="https://www.framer.com/@sanna-granqvist"><svg class="ph"><use href="#i-globe"/></svg>Framer</a>
