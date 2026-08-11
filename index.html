@@ -53,7 +53,9 @@
     color: var(--ink-faint); font-weight: 400; font-variant-numeric: tabular-nums;
   }
 
-  svg.ph { width: 1em; height: 1em; flex-shrink: 0; }
+  /* fill is inherited, so it reaches the <use> shadow content — without this
+     the symbol paths fall back to SVG's default black fill. */
+  svg.ph { width: 1em; height: 1em; flex-shrink: 0; fill: currentColor; }
 
   /* ---- Tool cards ---- */
   .cards {
