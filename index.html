@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toolbox — Sanna Granqvist</title>
-<meta name="description" content="Small, sharp tools built with Claude Code — palette libraries, screenshot CLIs, image converters, calculators and Framer plugins. Free, open source, no accounts.">
+<meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators and Framer plugins. Free, open source, no accounts.">
 <meta property="og:title" content="Toolbox — Sanna Granqvist">
-<meta property="og:description" content="Small, sharp tools built with Claude Code. Free, open source, no accounts.">
+<meta property="og:description" content="Small, sharp tools for design work. Free, open source, no accounts.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230f0f0f%22/><text x=%2232%22 y=%2244%22 font-size=%2236%22 text-anchor=%22middle%22>🧰</text></svg>">
 <link rel="stylesheet" href="https://granqvistsanna-web.github.io/graphite-console/tokens.css">
 <style>
@@ -72,7 +72,7 @@
   .card .tile {
     width: 40px; height: 40px; border-radius: var(--r-sm);
     display: grid; place-items: center;
-    background: var(--bg-2); color: var(--ink-low);
+    background: var(--bg-2); color: var(--ink-mid);
     transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
   }
   .card .tile svg.ph { width: 20px; height: 20px; }
@@ -85,7 +85,7 @@
   /* stretched link — whole card opens the tool */
   .card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-lg); }
   .card h3 svg.ph {
-    width: 13px; height: 13px; color: var(--ink-faint);
+    width: 13px; height: 13px; color: var(--ink-low);
     transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
   }
   .card:hover h3 svg.ph { color: var(--ink-hi); transform: translate(1px, -1px); }
@@ -123,7 +123,7 @@
   .prow + .prow { border-top: 1px solid var(--hairline); }
   .prow:hover { background: var(--bg-2); }
   .prow:focus-visible { outline: 2px solid var(--ink-low); outline-offset: -2px; }
-  .prow .picon { color: var(--ink-low); width: 18px; height: 18px; }
+  .prow .picon { color: var(--ink-mid); width: 18px; height: 18px; }
   .prow .pname { font-size: 15px; font-weight: 500; color: var(--ink-hi); white-space: nowrap; }
   .prow .pdesc {
     flex: 1; font-size: 13.5px; color: var(--ink-low);
@@ -134,7 +134,7 @@
     text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
   }
   .prow .parrow {
-    width: 13px; height: 13px; color: var(--ink-faint);
+    width: 13px; height: 13px; color: var(--ink-low);
     transition: color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
   }
   .prow:hover .parrow { color: var(--ink-hi); transform: translate(1px, -1px); }
@@ -152,14 +152,12 @@
   }
   footer .flink:hover { color: var(--ink-hi); }
   footer .flink svg.ph { width: 15px; height: 15px; }
-  footer .colophon { margin-left: auto; }
 
   @media (max-width: 720px) {
     .page { padding-top: 48px; }
     .prow { flex-wrap: wrap; row-gap: 2px; padding-block: 14px; }
     .prow .pdesc { flex-basis: 100%; order: 4; white-space: normal; padding-left: 32px; }
     .prow .pkind { margin-left: auto; }
-    footer .colophon { margin-left: 0; flex-basis: 100%; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0.01ms !important; }
@@ -188,7 +186,7 @@
 <div class="page">
 
   <header>
-    <div class="eyebrow">Sanna Granqvist · Built with Claude Code</div>
+    <div class="eyebrow">Sanna Granqvist</div>
     <h1>Toolbox</h1>
     <p class="lede">Small, sharp tools for design work — palettes, screenshots, image
     conversion, pricing. Everything here is <strong>free and open source</strong>, runs
@@ -305,7 +303,6 @@
     <a class="flink" href="https://github.com/granqvistsanna-web"><svg class="ph"><use href="#i-github"/></svg>GitHub</a>
     <a class="flink" href="https://www.linkedin.com/in/sanna-granqvist-66b45ab7"><svg class="ph"><use href="#i-linkedin"/></svg>LinkedIn</a>
     <a class="flink" href="https://www.framer.com/@sanna-granqvist"><svg class="ph"><use href="#i-globe"/></svg>Framer</a>
-    <span class="colophon">Set in Geist · Graphite Console</span>
   </footer>
 
 </div>
