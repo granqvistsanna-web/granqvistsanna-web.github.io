@@ -64,21 +64,26 @@
   /* ---- Header ---- */
   header { display: flex; align-items: flex-start; gap: 20px; }
   .htext { flex: 1; min-width: 0; }
+  /* The surface ladder is only ~1.1:1 between steps, so an unlabelled plate
+     reads as a stray dot. The hairline gives it an edge and the word gives it
+     a name — both name the destination, not the current state. */
   .theme-toggle {
-    flex-shrink: 0; margin-top: 6px;
-    width: 40px; height: 40px; padding: 0;
-    display: grid; place-items: center;
-    background: var(--bg-1); color: var(--ink-low);
-    border: none; border-radius: var(--r-sm); cursor: pointer;
+    flex-shrink: 0; margin-top: 5px;
+    height: 40px; padding: 0 15px;
+    display: inline-flex; align-items: center;
+    background: var(--bg-2); color: var(--ink-mid);
+    border: 1px solid var(--hairline); border-radius: var(--r-pill);
+    font-family: inherit; font-size: 13.5px; font-weight: 500; line-height: 1;
+    cursor: pointer; white-space: nowrap;
     transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
   }
-  .theme-toggle:hover { background: var(--bg-2); color: var(--ink-hi); }
+  .theme-toggle:hover { background: var(--bg-3); color: var(--ink-hi); }
   .theme-toggle:focus-visible { outline: 2px solid var(--ink-low); outline-offset: 2px; }
-  .theme-toggle svg.ph { width: 18px; height: 18px; }
-  /* the icon names the destination, not the current state */
+  .theme-toggle svg.ph { width: 16px; height: 16px; }
+  .theme-toggle .tface { display: inline-flex; align-items: center; gap: 9px; }
   .theme-toggle .to-dark { display: none; }
   :root[data-theme="light"] .theme-toggle .to-light { display: none; }
-  :root[data-theme="light"] .theme-toggle .to-dark { display: block; }
+  :root[data-theme="light"] .theme-toggle .to-dark { display: inline-flex; }
 
   h1 {
     color: var(--ink-hi);
@@ -249,8 +254,8 @@
       <p class="lede">Tools for design work. Free, open source, no accounts.</p>
     </div>
     <button class="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
-      <svg class="ph to-light"><use href="#i-sun"/></svg>
-      <svg class="ph to-dark"><use href="#i-moon"/></svg>
+      <span class="tface to-light"><svg class="ph"><use href="#i-sun"/></svg>Light</span>
+      <span class="tface to-dark"><svg class="ph"><use href="#i-moon"/></svg>Dark</span>
     </button>
   </header>
 
