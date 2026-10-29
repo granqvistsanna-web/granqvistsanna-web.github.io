@@ -125,6 +125,9 @@
   .intro { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 136px 112px; }
   .intro > * { animation: rise var(--t-rise) var(--rise) both; }
   @keyframes rise { from { opacity: 0; translate: 0 10px; } }
+  /* heading and lede rise line by line: a script splits them into words and numbers each by its line */
+  .intro.lines > h1, .intro.lines > .lede { animation: none; }
+  .intro .w { display: inline-block; animation: rise var(--t-rise) var(--rise) both; animation-delay: calc(var(--l) * var(--stagger) * 1.5); }
   h1 { margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
   .lede { margin: 0; max-width: 46ch; font-size: 16px; line-height: 1.55; color: var(--ink-4); text-wrap: balance; }
   .lede b { font-weight: 400; color: var(--ink); }
@@ -419,6 +422,32 @@
     <h1>Toolbox</h1>
     <p class="lede">Small, sharp <b>tools for design work</b>, <b>Framer plugins</b> and <b>Claude Code skills</b>. Free, open source, no accounts.</p>
   </div>
+  <script>
+    /* runs before first paint: split the heading and lede into words, tag each with the line it lands on */
+    (function () {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var intro = document.querySelector(".intro"), tops = [];
+      intro.querySelectorAll("h1, .lede").forEach(function (el) {
+        var walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), texts = [];
+        while (walk.nextNode()) texts.push(walk.currentNode);
+        texts.forEach(function (t) {
+          var f = document.createDocumentFragment();
+          t.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) return f.appendChild(document.createTextNode(part));
+            var w = document.createElement("span"); w.className = "w"; w.textContent = part; f.appendChild(w);
+          });
+          t.replaceWith(f);
+        });
+      });
+      intro.querySelectorAll(".w").forEach(function (w) {
+        var y = Math.round(w.getBoundingClientRect().top);
+        if (tops.indexOf(y) < 0) tops.push(y);
+        w.style.setProperty("--l", tops.indexOf(y));
+      });
+      intro.classList.add("lines");
+    })();
+  </script>
 
   <section id="tools" style="padding-top:0">
     <div class="chips" role="group" aria-label="Filter tools">
