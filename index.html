@@ -163,18 +163,85 @@
   .card .desc { position: relative; z-index: 1; margin: 48px 20px 0 16px; max-width: 40ch;
     font-size: 14px; line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
   /* the page itself, as a window peeking in from the bottom-right corner; it eases up-left on hover.
-     Four framings take turns so the grid doesn't repeat: default, zoomed out, from the right, zoomed in. */
+     Three framings take turns so the grid doesn't repeat: default, zoomed out, zoomed in.
+     .r frames from the right, for pages whose right side carries the content. */
   .shot {
     position: absolute; top: var(--shot-y, 124px); left: var(--shot-x, 28px); width: var(--shot-w, 760px); aspect-ratio: 16 / 10;
     border-radius: 14px; overflow: hidden; background: var(--bg);
     box-shadow: var(--lift); transition: translate var(--t-move) var(--spring);
   }
-  .card:nth-child(4n+2) .shot { --shot-w: 620px; --shot-y: 148px; --shot-x: 44px; }
-  .card:nth-child(4n+3) .shot { --shot-w: 760px; --shot-y: 136px; left: auto; right: 28px; }
-  .card:nth-child(4n+3) .shot img { object-position: top right; }
-  .card:nth-child(4n+4) .shot { --shot-w: 980px; --shot-y: 112px; --shot-x: 20px; }
+  .card:nth-child(3n+2) .shot { --shot-w: 620px; --shot-y: 148px; --shot-x: 44px; }
+  .card:nth-child(3n+3) .shot { --shot-w: 980px; --shot-y: 112px; --shot-x: 20px; }
+  .card .shot.r { --shot-w: 760px; --shot-y: 136px; left: auto; right: 28px; }
+  .shot.r img { object-position: top right; }
   .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
   .shot .d, :root[data-theme="dark"] .shot .l { display: none; }
+  /* Some tools show one object instead of a screenshot, on the same stage, answering the card's hover */
+  .art { position: absolute; inset: 104px 0 56px; display: grid; place-items: center; }
+  .art > * { grid-area: 1 / 1; }
+  /* Button Hover Lab: one button on blueprint guides; a cursor glides in and presses it */
+  .lab-btn {
+    position: relative; height: 56px; padding: 0 26px 0 30px; border-radius: var(--r-pill);
+    background: var(--ink); color: var(--on-ink); display: inline-flex; align-items: center; gap: 10px;
+    font: 500 17px/1 var(--font-ui); box-shadow: var(--lift);
+    transition: scale var(--t-press) var(--spring-soft) 260ms;
+  }
+  .lab-btn::before, .lab-btn::after { content: ""; position: absolute; pointer-events: none; opacity: .3; }
+  .lab-btn::before { inset: -1px -100vw; border-block: 1px dashed var(--guide); }
+  .lab-btn::after { inset: -100vh -1px; border-inline: 1px dashed var(--guide); }
+  .lab-roll { display: block; height: 17px; overflow: hidden; }
+  .lab-roll span { display: block; transition: translate var(--t-open) var(--spring-soft) 200ms; }
+  .lab-btn svg.i { transition: translate var(--t-open) var(--spring) 200ms; }
+  .lab-cur { width: 26px; height: 26px; translate: 150px 90px; fill: var(--ink); stroke: var(--bg); stroke-width: 1.5; stroke-linejoin: round;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,.2)); transition: translate 420ms var(--settle); }
+  .card:hover .lab-cur, .card:focus-within .lab-cur { translate: 58px 14px; }
+  .card:hover .lab-roll span, .card:focus-within .lab-roll span { translate: 0 -100%; }
+  .card:hover .lab-btn svg.i, .card:focus-within .lab-btn svg.i { translate: 4px 0; }
+  .card:hover .lab-btn, .card:focus-within .lab-btn { scale: .97; }
+  /* WebP Converter: the same picture, heavy then light, sized to its file */
+  .art.webp { display: flex; justify-content: center; align-items: center; gap: 22px; }
+  .file { display: grid; gap: 10px; justify-items: center; transition: scale var(--t-press) var(--spring); }
+  .file .pic {
+    width: var(--px); aspect-ratio: 1; border-radius: 14px; box-shadow: var(--lift);
+    background:
+      radial-gradient(circle at 68% 34%, #ffd9a8 0 9%, transparent 9.5%),
+      radial-gradient(120% 70% at 20% 105%, #6b4f3a 0 48%, transparent 48.5%),
+      radial-gradient(120% 80% at 90% 112%, #8a6247 0 52%, transparent 52.5%),
+      linear-gradient(#e8794f, var(--ember) 45%, #f2b48c);
+  }
+  .file.big { --px: 140px; }
+  .file.small { --px: 60px; }
+  .file b { font: 500 13px/1 var(--font-ui); color: var(--ink); }
+  .file small { font: 400 12px/1 var(--font-code); color: var(--ink-4); margin-top: -4px; }
+  .art.webp > svg.i { width: 20px; height: 20px; color: var(--ink-4); rotate: 45deg; transition: translate var(--t-move) var(--spring); }
+  .card:hover .art.webp > svg.i, .card:focus-within .art.webp > svg.i { translate: 4px 0; }
+  .card:hover .file.small, .card:focus-within .file.small { scale: 1.12; }
+  /* AEO Scanner: a page laid flat in 3D, a scan sweeping it, the quotable passage lifting off */
+  .art.aeo { perspective: 900px; }
+  .slab {
+    position: relative; width: 210px; height: 250px; border-radius: 18px; transform-style: preserve-3d;
+    background: var(--thumb); box-shadow: var(--lift); rotate: x 56deg; transform: rotateZ(-36deg);
+    transition: rotate 600ms var(--settle);
+  }
+  .card:hover .slab, .card:focus-within .slab { rotate: x 50deg; }
+  .slab i { position: absolute; left: 22px; border-radius: 4px; background: rgba(var(--ink-rgb), .16); }
+  .slab .h { top: 24px; width: 120px; height: 14px; background: rgba(var(--ink-rgb), .5); translate: 0 0 8px; }
+  .slab .l1 { top: 54px; width: 160px; height: 6px; }
+  .slab .l2 { top: 68px; width: 130px; height: 6px; }
+  .slab .q, .slab .qs { top: 96px; width: 166px; height: 54px; border-radius: 10px; }
+  .slab .qs { background: rgba(var(--ink-rgb), .12); filter: blur(6px); }
+  .slab .q { background: var(--signal); box-shadow: 0 0 24px color-mix(in srgb, var(--signal) 60%, transparent);
+    translate: 0 0 26px; transition: translate 600ms var(--spring); }
+  .card:hover .slab .q, .card:focus-within .slab .q { translate: 0 0 52px; }
+  .slab .l3 { top: 174px; width: 150px; height: 6px; }
+  .slab .l4 { top: 188px; width: 110px; height: 6px; }
+  .slab .scan {
+    left: 0; right: 0; top: 0; height: 64px; border-radius: 0; transform-origin: top; transform: rotateX(-90deg);
+    background: linear-gradient(color-mix(in srgb, var(--signal) 45%, transparent), transparent);
+    border-top: 2px solid var(--signal); animation: scan 3.6s var(--settle) infinite alternate;
+  }
+  @keyframes scan { to { translate: 0 248px; } }
+  @media (prefers-reduced-motion: reduce) { .slab .scan { animation: none; translate: 0 120px; } }
   :root[data-theme="dark"] .shot .d { display: block; }
   .card:hover .shot, .card:focus-within .shot { translate: -6px -8px; }
   .foot { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
@@ -342,7 +409,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/webp-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/webp-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art webp" aria-hidden="true"><span class="file big"><span class="pic"></span><b>PNG</b><small>2.4 MB</small></span><svg class="i"><use href="#i-arrow"/></svg><span class="file small"><span class="pic"></span><b>WebP</b><small>380 KB</small></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -366,7 +433,7 @@
         <span class="tag">Reference</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/lab-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/lab-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="lab-btn"><span class="lab-roll"><span>Hover me</span><span>Hover me</span></span><svg class="i"><use href="#i-arrow"/></svg></span><svg class="lab-cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -382,7 +449,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Work out a freelance hourly rate and sanity-check any project quote.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/pricing-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pricing-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="shot r" aria-hidden="true"><img class="l" src="shots/pricing-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pricing-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -390,7 +457,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/aeo-scanner" aria-label="AEO Scanner source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/aeo-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/aeo-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art aeo" aria-hidden="true"><div class="slab"><i class="h"></i><i class="l1"></i><i class="l2"></i><i class="qs"></i><i class="q"></i><i class="l3"></i><i class="l4"></i><i class="scan"></i></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
