@@ -162,13 +162,17 @@
   /* what the tool does, one line under the tag */
   .card .desc { position: relative; z-index: 1; margin: 48px 20px 0 16px; max-width: 40ch;
     font-size: 14px; line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
-  /* the page itself, as a window peeking in from the bottom-right corner, every one at the same zoom;
-     it eases up-left on hover */
+  /* the page itself, as a window peeking in from the bottom-right corner; it eases up-left on hover.
+     Four framings take turns so the grid doesn't repeat: default, zoomed out, from the right, zoomed in. */
   .shot {
-    position: absolute; top: 124px; left: 28px; width: 760px; aspect-ratio: 16 / 10;
+    position: absolute; top: var(--shot-y, 124px); left: var(--shot-x, 28px); width: var(--shot-w, 760px); aspect-ratio: 16 / 10;
     border-radius: 14px; overflow: hidden; background: var(--bg);
     box-shadow: var(--lift); transition: translate var(--t-move) var(--spring);
   }
+  .card:nth-child(4n+2) .shot { --shot-w: 620px; --shot-y: 148px; --shot-x: 44px; }
+  .card:nth-child(4n+3) .shot { --shot-w: 760px; --shot-y: 136px; left: auto; right: 28px; }
+  .card:nth-child(4n+3) .shot img { object-position: top right; }
+  .card:nth-child(4n+4) .shot { --shot-w: 980px; --shot-y: 112px; --shot-x: 20px; }
   .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
   .shot .d, :root[data-theme="dark"] .shot .l { display: none; }
   :root[data-theme="dark"] .shot .d { display: block; }
