@@ -150,7 +150,6 @@
   .card {
     position: relative; min-height: 440px; border-radius: var(--r-card);
     background: var(--wash); overflow: hidden;
-    display: grid; place-items: center; padding: 64px 24px 76px;
     transition: background var(--t-color);
   }
   .card:hover { background: var(--wash-2); }
@@ -160,28 +159,28 @@
     display: inline-flex; align-items: center; font: 500 11px/1 var(--font-ui); letter-spacing: .01em;
   }
   .card .src { position: absolute; top: 8px; right: 8px; z-index: 2; }
-  .face { display: grid; justify-items: center; gap: var(--s-8); text-align: center; }
-  /* the knob is the mascot's squat octagon */
-  .knob {
-    position: relative; isolation: isolate; width: 100px; height: 100px; color: var(--on-ink);
-    display: grid; place-items: center;
-    transition: scale var(--t-move) var(--spring), rotate 420ms var(--spring);
+  /* what the tool does, one line under the tag */
+  .card .desc { position: relative; z-index: 1; margin: 48px 20px 0 16px; max-width: 40ch;
+    font-size: 14px; line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
+  /* the page itself, as a window peeking in from the bottom-right corner, every one at the same zoom;
+     it eases up-left on hover */
+  .shot {
+    position: absolute; top: 124px; left: 28px; width: 760px; aspect-ratio: 16 / 10;
+    border-radius: 14px; overflow: hidden; background: var(--bg);
+    box-shadow: var(--lift); transition: translate var(--t-move) var(--spring);
   }
-  .knob::before { content: ""; position: absolute; inset: 0; background: var(--ink); z-index: -1;
-    -webkit-mask: var(--oct) center/contain no-repeat; mask: var(--oct) center/contain no-repeat; }
-  .knob svg.i { position: relative; }
-  :root { --oct: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='31,22 69,22 91,40 91,64 69,82 31,82 9,64 9,40' fill='%23000' stroke='%23000' stroke-width='14' stroke-linejoin='round'/%3E%3C/svg%3E"); }
-  .knob svg.i { width: 30px; height: 30px; stroke-width: 1.75; }
-  .card:hover .knob, .card:focus-within .knob { scale: 1.06; rotate: -7deg; }
-  .face p { margin: 0; max-width: 32ch; font-size: 14.5px; line-height: 1.5; color: var(--ink-4); text-wrap: balance; }
-  .foot { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
+  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .shot .d, :root[data-theme="dark"] .shot .l { display: none; }
+  :root[data-theme="dark"] .shot .d { display: block; }
+  .card:hover .shot, .card:focus-within .shot { translate: -6px -8px; }
+  .foot { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
     height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
     background: var(--frost); color: var(--ink); min-width: 0;
     display: inline-flex; align-items: center; font: 500 13.5px/1 var(--font-ui);
     text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .name::after { content: ""; position: absolute; inset: -400px -12px -12px; z-index: 1; border-radius: var(--r-card); }
+  .name::after { content: ""; position: absolute; inset: -480px -12px -12px; z-index: 1; border-radius: var(--r-card); }
   .go {
     width: var(--h-field); height: var(--h-field); flex: none; border-radius: 50%;
     background: var(--ink); color: var(--on-ink); display: grid; place-items: center;
@@ -258,15 +257,6 @@
 
 <!-- Icons: Lucide geometry (lucide.dev, ISC), drawn as strokes by svg.i -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.12a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.55-2.5 5.55-5.55C21.97 6.01 17.46 2 12 2z"/></symbol>
-  <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
-  <symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.22 3.48a.5.5 0 0 0 .78-.42V7.87a.5.5 0 0 0-.75-.43L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol>
-  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
-  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
-  <symbol id="i-pointer" viewBox="0 0 24 24"><path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.04 9.69a.5.5 0 0 1 .65-.65l11 4.5a.5.5 0 0 1-.07.95l-4.35 1.04a1 1 0 0 0-.74.74l-1.04 4.35a.5.5 0 0 1-.95.07z"/></symbol>
-  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8"/><path d="M16 14v4"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></symbol>
-  <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></symbol>
-  <symbol id="i-cone" viewBox="0 0 24 24"><path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11"/><path d="M17 7A5 5 0 0 0 7 7"/><path d="M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4"/></symbol>
   <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
   <symbol id="i-spline" viewBox="0 0 24 24"><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M5 17A12 12 0 0 1 17 5"/></symbol>
   <symbol id="i-timer" viewBox="0 0 24 24"><path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/></symbol>
@@ -327,63 +317,72 @@
       <article class="card" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/colorbook" aria-label="Colourbook source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-palette"/></svg></span><p>202 colour palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p></div>
+        <p class="desc">202 colour palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/colorbook-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/colorbook-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/colorbook/">Colourbook</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-image"/></svg></span><p>Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p></div>
+        <p class="desc">Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/webp-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/webp-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/video-compressor" aria-label="Video Compressor source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-video"/></svg></span><p>Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p></div>
+        <p class="desc">Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/video-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/video-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card wide" data-kind="system">
         <span class="tag">Design system</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pumice" aria-label="Pumice source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-layers"/></svg></span><p>The soft, warm-grey design system this page is set in. Pills, panels, springy motion.</p></div>
+        <p class="desc">The soft, warm-grey design system this page is set in. Pills, panels, springy motion.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/pumice-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pumice-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pumice/">Pumice</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card wide" data-kind="reference">
         <span class="tag">Reference</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-pointer"/></svg></span><p>Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p></div>
+        <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/lab-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/lab-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="cli">
         <span class="tag">CLI · Node</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-camera"/></svg></span><p>Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p></div>
+        <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/frameshot-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/frameshot-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-calc"/></svg></span><p>Work out a freelance hourly rate and sanity-check any project quote.</p></div>
+        <p class="desc">Work out a freelance hourly rate and sanity-check any project quote.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/pricing-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pricing-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/aeo-scanner" aria-label="AEO Scanner source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-bot"/></svg></span><p>Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p></div>
+        <p class="desc">Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/aeo-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/aeo-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="site">
         <span class="tag">Website</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/glass" aria-label="Kalorisnål Glass source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-cone"/></svg></span><p>Sweden's low-calorie ice creams 2026, ranked per piece — from 32 kcal and up.</p></div>
+        <p class="desc">Sweden's low-calorie ice creams 2026, ranked per piece — from 32 kcal and up.</p>
+        <div class="shot" aria-hidden="true"><img class="l" src="shots/glass-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/glass-dark.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="foot"><a class="name" href="https://www.kalorisnalglass.se/">Kalorisnål Glass</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 

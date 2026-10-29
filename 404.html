@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Not found — Toolbox</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap">
+<link rel="stylesheet" href="https://granqvistsanna-web.github.io/pumice/tokens.css">
+<!-- absolute paths throughout: Pages serves this file at whatever URL was missing -->
+<script src="https://granqvistsanna-web.github.io/mascot.js" defer></script>
+<script>
+  (function () {
+    var t;
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; min-height: 100dvh; background: var(--bg); color: var(--ink-2);
+    font: 400 15px/1.5 var(--font-ui); -webkit-font-smoothing: antialiased;
+    display: grid; grid-template-rows: auto 1fr;
+  }
+  .bar { height: 64px; padding: 0 max(16px, env(safe-area-inset-left, 0px)); display: flex; align-items: center; }
+  .home { --tb-size: 30px; font-size: 15px; }
+  main {
+    display: grid; justify-items: center; align-content: center; gap: var(--s-7); text-align: center;
+    padding: 48px 16px 96px;
+  }
+  main > * { animation: rise var(--t-rise) var(--rise) both; }
+  main > :nth-child(2) { animation-delay: .08s; }
+  main > :nth-child(3) { animation-delay: .16s; }
+  main > :nth-child(4) { animation-delay: .24s; }
+  @keyframes rise { from { opacity: 0; translate: 0 10px; } }
+  /* the mascot, looking for whatever you came for */
+  [data-toolbox-mascot] { --tb-size: clamp(112px, 18vw, 160px); margin-bottom: var(--s-4); }
+  h1 { margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+  p { margin: 0; max-width: 40ch; font-size: 16px; line-height: 1.55; color: var(--ink-4); text-wrap: balance; }
+  .btn {
+    height: var(--h-button); padding: 0 22px; margin-top: var(--s-4); border-radius: var(--r-pill);
+    background: var(--ink); color: var(--on-ink); text-decoration: none;
+    display: inline-flex; align-items: center; font: 500 15px/1 var(--font-ui);
+    transition: scale var(--t-press) var(--spring-soft);
+  }
+  .btn:hover { scale: .98; }
+  .btn:active { scale: var(--press-hero); }
+  :focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<header class="bar"><a class="home" href="https://granqvistsanna-web.github.io/" data-toolbox-home>Toolbox</a></header>
+<main>
+  <span data-toolbox-mascot></span>
+  <h1>Nothing here</h1>
+  <p>This page doesn't exist, or it moved. Everything that's left is in the Toolbox.</p>
+  <a class="btn" href="https://granqvistsanna-web.github.io/">Back to the Toolbox</a>
+</main>
+</body>
+</html>
