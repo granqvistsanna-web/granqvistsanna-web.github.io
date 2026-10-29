@@ -5,6 +5,7 @@
 ## Tools
 
 - [AEO Scanner](https://granqvistsanna-web.github.io/aeo-scanner/): checks whether ChatGPT, Claude, Perplexity and Gemini can find, read and quote a page
+- [Performance Checker](https://granqvistsanna-web.github.io/perf-checker/): runs Lighthouse on a URL and explains the scores, Core Web Vitals, real-user data and the fixes worth doing first
 - [Button Lab](https://granqvistsanna-web.github.io/button-hover-lab/): button hover animations, built and ready to port to Framer
 - [Colourbook](https://granqvistsanna-web.github.io/colorbook/): a palette library
 - [Video Compressor](https://granqvistsanna-web.github.io/video-compressor/): shrinks video loops for the web in the browser, nothing uploaded

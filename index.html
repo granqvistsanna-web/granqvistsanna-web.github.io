@@ -243,6 +243,12 @@
   .ph { width: 54px; height: 96px; border-radius: 16px; background: #f2a1b3; translate: 78px 34px; }
   .card:is(:hover, :focus-within) .win { rotate: -3deg; }
   .card:is(:hover, :focus-within) .ph { translate: 66px 26px; rotate: 6deg; }
+  /* Performance Checker: a clay speed dial; the needle swings to fast */
+  .dial { width: 200px; height: 100px; border-radius: 100px 100px 0 0; background: #f3d57e; translate: 0 10px; }
+  .needle { width: 10px; height: 82px; border-radius: 5px; background: #d9435a; transform-origin: 50% 100%; translate: 0 19px; rotate: -58deg;
+    transition: rotate 700ms var(--spring); }
+  .hub { width: 26px; aspect-ratio: 1; border-radius: 50%; background: #fff; translate: 0 60px; }
+  .card:is(:hover, :focus-within) .needle { rotate: 52deg; }
   .foot { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
     height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
@@ -466,6 +472,14 @@
         <p class="desc">Drop in screenshots, get browser and phone mockups out, with Framer thumbnail templates.</p>
         <div class="art" aria-hidden="true"><span class="win clay"></span><span class="ph clay"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/mockup/">Mockup</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
+      </article>
+
+      <article class="card sage" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/perf-checker" aria-label="Performance Checker source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <p class="desc">How fast is a page? Lighthouse scores, Core Web Vitals, real-user data and the fixes worth doing first.</p>
+        <div class="art" aria-hidden="true"><span class="dial clay"></span><span class="needle"></span><span class="hub"></span></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/perf-checker/">Performance Checker</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
 
