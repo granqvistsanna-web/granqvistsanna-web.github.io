@@ -1,0 +1,17 @@
+# Toolbox
+
+> Sanna Granqvist's small, free, open-source tools for design work: web apps, Framer plugins and Claude Code skills. No accounts.
+
+## Tools
+
+- [AEO Scanner](https://granqvistsanna-web.github.io/aeo-scanner/): checks whether ChatGPT, Claude, Perplexity and Gemini can find, read and quote a page
+- [Button Lab](https://granqvistsanna-web.github.io/button-hover-lab/): button hover animations, built and ready to port to Framer
+- [Colourbook](https://granqvistsanna-web.github.io/colorbook/): a palette library
+- [Video Compressor](https://granqvistsanna-web.github.io/video-compressor/): shrinks video loops for the web in the browser, nothing uploaded
+- [WebP Converter](https://granqvistsanna-web.github.io/image-compressor/): converts images to WebP in the browser
+- [Rate & Pricing Calculator](https://granqvistsanna-web.github.io/pricing/): works out rates and project prices
+- [frameshotter](https://granqvistsanna-web.github.io/frameshot/): a local CLI for retina screenshots of Framer sites
+
+## Design system
+
+- [Pumice](https://granqvistsanna-web.github.io/pumice/): the soft, warm-grey design system every tool page uses
