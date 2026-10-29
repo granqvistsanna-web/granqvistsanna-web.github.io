@@ -57,12 +57,17 @@
   .mark { --tb-size: 30px; font-size: 15px; }
   .nav { display: flex; gap: var(--s-1); }
   .nav a {
+    position: relative; isolation: isolate;
     height: var(--h-nav); padding: 0 13px; border-radius: var(--r-pill);
     display: inline-flex; align-items: center; white-space: nowrap;
     font: 500 14px/1 var(--font-ui); color: var(--ink-4); text-decoration: none;
     transition: color var(--t-color), scale var(--t-press) var(--spring-soft);
   }
   .nav a:hover, .nav a[aria-current="true"] { color: var(--ink); }
+  /* the same springy wash the icon tools use, so every control in the bar answers alike */
+  .nav a::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--wash);
+    opacity: 0; scale: .86; transition: opacity 150ms, scale var(--t-press) var(--spring-soft); }
+  .nav a:hover::before, .nav a:focus-visible::before, .nav a[aria-current="true"]::before { opacity: 1; scale: 1; }
   .nav a:active { scale: var(--press-link); }
 
   .find {
@@ -71,12 +76,14 @@
     padding: 0 6px 0 14px; color: var(--ink-4); cursor: text;
     transition: background var(--t-color), box-shadow var(--t-color);
   }
+  .find:hover { background: var(--wash-2); }
+  .find:hover .kbd { color: var(--ink-3); }
   .find:focus-within { background: var(--bg); box-shadow: var(--ring); }
   .find svg.i { width: 16px; height: 16px; }
   .find input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font: 400 14px/1 var(--font-ui); color: var(--ink); }
   .find input::placeholder { color: var(--ink-4); }
   .find input::-webkit-search-cancel-button { display: none; }
-  .kbd { font: 500 11px/1 var(--font-ui); color: var(--ink-4); padding: 5px 7px; }
+  .kbd { font: 500 11px/1 var(--font-ui); color: var(--ink-4); padding: 5px 7px; transition: color var(--t-color); }
 
   .tail { display: flex; align-items: center; justify-content: flex-end; gap: var(--s-4); }
   .tool {
@@ -89,6 +96,8 @@
   .tool:hover::before, .tool:focus-visible::before { opacity: 1; scale: 1; }
   .tool > svg { position: relative; transition: scale var(--t-press) var(--spring-soft); }
   .tool:hover > svg { scale: 1.04; }
+  .theme > svg { transition: scale var(--t-press) var(--spring-soft), rotate 420ms var(--spring); }
+  .theme:hover > svg { rotate: -18deg; }
   .tool:active > svg { scale: .96; transition-duration: 90ms; }
   .tool.ring { box-shadow: var(--ring); }
   .theme .to-dark { display: none; }
@@ -105,7 +114,8 @@
   .btn:hover { opacity: .86; }
   .btn:active { scale: var(--press); }
   .btn.sm { height: var(--h-nav); padding: 0 16px; font-size: 14px; }
-  .btn.sm svg.i { width: 16px; height: 16px; }
+  .btn.sm svg.i { width: 16px; height: 16px; transition: rotate 420ms var(--spring); }
+  .btn.sm:hover svg.i { rotate: -10deg; }
   .btn.quiet { background: var(--wash); color: var(--ink); }
   .btn.quiet:hover { opacity: 1; background: var(--wash-2); }
 
@@ -140,7 +150,9 @@
     position: relative; min-height: 340px; border-radius: var(--r-card);
     background: var(--wash); overflow: hidden;
     display: grid; place-items: center; padding: 64px 24px 76px;
+    transition: background var(--t-color);
   }
+  .card:hover { background: var(--wash-2); }
   .card .tag {
     position: absolute; top: 12px; left: 12px; height: var(--h-tag); padding: 0 10px;
     border-radius: var(--r-pill); background: var(--thumb); color: var(--ink);
@@ -436,9 +448,17 @@
     var root = document.documentElement;
 
     // theme
-    document.querySelector(".theme").addEventListener("click", function () {
-      root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-      try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
+    // Pumice's theme switch: the new theme opens as a circle from the toggle (tokens.css draws it)
+    var tb = document.querySelector(".theme");
+    tb.addEventListener("click", function () {
+      var next = root.dataset.theme === "dark" ? "light" : "dark";
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      var flip = function () { root.dataset.theme = next; };
+      if (!document.startViewTransition) return flip();
+      var r = tb.getBoundingClientRect();
+      root.style.setProperty("--vt-x", r.left + r.width / 2 + "px");
+      root.style.setProperty("--vt-y", r.top + r.height / 2 + "px");
+      document.startViewTransition(flip);
     });
 
     // filter: chips by kind, search by name and description, both at once
