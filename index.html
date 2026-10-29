@@ -64,10 +64,12 @@
     transition: color var(--t-color), scale var(--t-press) var(--spring-soft);
   }
   .nav a:hover, .nav a[aria-current="true"] { color: var(--ink); }
-  /* the same springy wash the icon tools use, so every control in the bar answers alike */
-  .nav a::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--wash);
-    opacity: 0; scale: .86; transition: opacity 150ms, scale var(--t-press) var(--spring-soft); }
-  .nav a:hover::before, .nav a:focus-visible::before, .nav a[aria-current="true"]::before { opacity: 1; scale: 1; }
+  /* one wash pill slides to the link under the pointer or in focus, and back to the current section */
+  .nav { position: relative; }
+  .nav-pill { position: absolute; top: 0; left: 0; width: 0; height: var(--h-nav); border-radius: var(--r-pill);
+    background: var(--wash); opacity: 0; pointer-events: none; }
+  .nav-pill.ready { transition: translate var(--t-open) var(--spring-soft), width var(--t-open) var(--spring-soft), opacity 150ms; }
+  @media (prefers-reduced-motion: reduce) { .nav-pill.ready { transition: opacity 150ms; } }
   .nav a:active { scale: var(--press-link); }
 
   .find {
@@ -384,6 +386,7 @@
     <div class="lead">
       <a class="mark" href="#top" aria-label="Toolbox, back to top" data-toolbox-home><span>Toolbox</span></a>
       <nav class="nav" aria-label="Sections">
+        <span class="nav-pill" aria-hidden="true"></span>
         <a href="#tools" aria-current="true">Tools</a>
         <a href="#plugins">Plugins</a>
         <a href="#skills">Skills</a>
@@ -622,9 +625,26 @@
       es.forEach(function (e) {
         if (!e.isIntersecting || e.target.hidden) return;
         links.forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + e.target.id); });
+        if (!nav.matches(":hover, :focus-within")) pillTo(current());
       });
     }, { rootMargin: "-45% 0px -45% 0px" });
     ["tools", "plugins", "skills"].forEach(function (id) { io.observe(document.getElementById(id)); });
+
+    // nav: the pill follows hover and focus, and rests on the current section
+    var nav = document.querySelector(".nav"), pill = nav.querySelector(".nav-pill");
+    function current() { return nav.querySelector('[aria-current="true"]'); }
+    function pillTo(a) {
+      pill.style.opacity = a ? 1 : 0;
+      if (a) { pill.style.translate = a.offsetLeft + "px 0"; pill.style.width = a.offsetWidth + "px"; }
+    }
+    links.forEach(function (a) {
+      a.addEventListener("pointerenter", function () { pillTo(a); });
+      a.addEventListener("focus", function () { pillTo(a); });
+    });
+    nav.addEventListener("pointerleave", function () { pillTo(current()); });
+    nav.addEventListener("focusout", function () { pillTo(current()); });
+    addEventListener("resize", function () { pillTo(current()); });
+    document.fonts.ready.then(function () { pillTo(current()); requestAnimationFrame(function () { pill.classList.add("ready"); }); });
   })();
 </script>
 
