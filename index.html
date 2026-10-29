@@ -175,6 +175,8 @@
   .ui > * { grid-area: 1 / 1; }
   .wide .ui { scale: 1.6; }
   /* the graphic follows the card's width, not the window's, so it keeps the same margin in every column count */
+  @container (max-width: 899px) { .wide .ui { scale: 1.35; } }
+  @container (max-width: 799px) { .wide .ui { scale: 1.15; } }
   @container (max-width: 439px) { .card .ui { scale: 1.15; } }
   @container (max-width: 379px) { .card .ui { scale: 1; } }
   .card:hover .ui, .card:focus-within .ui { translate: calc(-50% - 6px) calc(-50% - 8px); }
@@ -225,14 +227,22 @@
   .term .ok { color: var(--ok); }
   .shotout { width: 96px; height: 64px; translate: 100px 60px; rotate: 4deg; }
   /* Button Hover Lab: one button, mid-hover */
-  .hov { height: 60px; padding: 0 30px; font-size: 18px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 22%, transparent); }
+  .hrow { display: flex; align-items: center; gap: var(--s-7); }
+  .pill.line { box-shadow: inset 0 0 0 1px var(--line-ctl); color: var(--ink); }
+  .side { width: 124px; justify-content: center; }
+  /* in a card too narrow for the row, only the hovered button stays */
+  @container (max-width: 699px) { .side { display: none; } }
+  .hov { height: 52px; padding: 0 26px; font-size: var(--fs-lead); box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 22%, transparent); }
   .hov svg.i { color: inherit; }
-  .cur { width: 26px; height: 26px; translate: 88px 16px; fill: #fff; stroke: #17181a; stroke-width: 1.5; stroke-linejoin: round; }
+  .cur { width: 26px; height: 26px; translate: 76px 14px; fill: #fff; stroke: #17181a; stroke-width: 1.5; stroke-linejoin: round; }
   /* Rate & Pricing: a rate and the slider that sets it */
   .calc { width: 250px; padding: 18px 18px 20px; display: grid; gap: 6px; }
   .calc small { font-size: var(--fs-caption); color: var(--ink-4); }
   .calc b { font: 500 34px/1.1 var(--font-ui); color: var(--ink); letter-spacing: -.02em; }
   .calc b span { font-size: var(--fs-body); color: var(--ink-4); font-weight: var(--fw-regular); }
+  .quote { display: flex; justify-content: space-between; margin-top: var(--s-8); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
+    font: var(--fw-medium) var(--fs-caption)/1 var(--font-ui); color: var(--ink-4); }
+  .calc .quote b { font: inherit; color: var(--ink); letter-spacing: 0; }
   .slider { position: relative; height: 4px; margin-top: 14px; border-radius: 2px; background: var(--wash-2); }
   .slider i { position: absolute; inset: 0 40% 0 0; border-radius: inherit; background: var(--signal); }
   .slider i::after { content: ""; position: absolute; right: -10px; top: -8px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-1), 0 2px 6px rgba(0,0,0,.15); }
@@ -241,14 +251,18 @@
   .score svg { position: absolute; inset: 0; rotate: -90deg; fill: none; stroke-width: 6; stroke-linecap: round; }
   .score .bg { stroke: var(--wash-2); }
   .score .fg { stroke: var(--c, var(--signal)); stroke-dasharray: calc(var(--n) * 1.948) 999; }
-  .aeo { width: 250px; padding: 18px; display: flex; gap: 16px; align-items: center; }
+  .aeo { width: 250px; padding: 8px 8px 18px; display: grid; gap: var(--s-7); }
+  .aeo .res { display: flex; gap: var(--s-7); align-items: center; padding: 0 10px; }
+  .url { height: 34px; padding: 0 var(--s-6); border-radius: var(--r-pill); background: var(--wash); display: flex; align-items: center; gap: var(--s-3);
+    font: var(--fw-regular) var(--fs-small)/1 var(--font-ui); color: var(--ink-3); }
+  .url svg.i { width: 14px; height: 14px; }
   .who { display: grid; gap: var(--s-3); font: var(--fw-medium) var(--fs-small)/1 var(--font-ui); color: var(--ink); }
   .who span { display: flex; gap: 6px; align-items: center; }
   .who svg.i { width: 14px; height: 14px; color: var(--ok); stroke-width: 2.5; }
   .who .no svg.i { color: var(--ink-5); }
-  .rings { padding: 14px; display: flex; gap: 10px; }
-  .rings > span { display: grid; justify-items: center; gap: 6px; font: 500 10.5px/1 var(--font-ui); color: var(--ink-4); white-space: nowrap; }
-  .rings .score { --d: 46px; --c: var(--ok); }
+  .rings { padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6) var(--s-8); }
+  .rings > span { display: grid; justify-items: center; gap: 6px; font: var(--fw-medium) var(--fs-tag)/1 var(--font-ui); color: var(--ink-4); white-space: nowrap; }
+  .rings .score { --d: 48px; --c: var(--ok); }
   /* Slight motion: one slow loop per graphic, each about what the tool does. Off for reduced motion. */
   @media (prefers-reduced-motion: no-preference) {
     .copied, .phone, .cur, .shotout { animation: bob 3.2s ease-in-out infinite alternate; }
@@ -503,7 +517,7 @@
         <span class="tag">Reference</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><span class="pill ink hov">Start the trial <svg class="i"><use href="#i-arrow"/></svg></span><svg class="cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="hrow"><span class="pill quiet side">Learn more</span><span class="pill ink hov">Start the trial <svg class="i"><use href="#i-arrow"/></svg></span><span class="pill line side">Book a call</span></div><svg class="cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -511,7 +525,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Work out a freelance hourly rate and sanity-check any project quote.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel calc"><small>Your hourly rate</small><b>850 <span>kr / h</span></b><div class="slider"><i></i></div></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel calc"><small>Your hourly rate</small><b>850 <span>kr / h</span></b><div class="slider"><i></i></div><div class="quote"><span>Project · 40 h</span><b>34 000 kr</b></div></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -519,7 +533,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/aeo-scanner" aria-label="AEO Scanner source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel aeo"><span class="score" style="--n:86"><svg viewBox="0 0 72 72"><circle class="bg" cx="36" cy="36" r="31"/><circle class="fg" cx="36" cy="36" r="31"/></svg>86</span><div class="who"><span><svg class="i"><use href="#i-check"/></svg>ChatGPT</span><span><svg class="i"><use href="#i-check"/></svg>Claude</span><span class="no"><svg class="i"><use href="#i-minus"/></svg>Perplexity</span></div></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel aeo"><span class="url"><svg class="i"><use href="#i-search"/></svg>yoursite.com</span><div class="res"><span class="score" style="--n:86"><svg viewBox="0 0 72 72"><circle class="bg" cx="36" cy="36" r="31"/><circle class="fg" cx="36" cy="36" r="31"/></svg>86</span><div class="who"><span><svg class="i"><use href="#i-check"/></svg>ChatGPT</span><span><svg class="i"><use href="#i-check"/></svg>Claude</span><span class="no"><svg class="i"><use href="#i-minus"/></svg>Perplexity</span></div></div></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
