@@ -149,10 +149,8 @@
   @media (min-width: 880px) { .card.wide { grid-column: span 2; } }
   .card {
     position: relative; min-height: 440px; border-radius: var(--r-card);
-    background: var(--wash); overflow: hidden;
-    transition: background var(--t-color);
+    overflow: hidden;
   }
-  .card:hover { background: var(--wash-2); }
   .card .tag {
     position: absolute; top: 12px; left: 12px; height: var(--h-tag); padding: 0 10px;
     border-radius: var(--r-pill); background: var(--thumb); color: var(--ink);
@@ -162,88 +160,82 @@
   /* what the tool does, one line under the tag */
   .card .desc { position: relative; z-index: 1; margin: 48px 20px 0 16px; max-width: 40ch;
     font-size: 14px; line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
-  /* the page itself, as a window peeking in from the bottom-right corner; it eases up-left on hover.
-     Three framings take turns so the grid doesn't repeat: default, zoomed out, zoomed in.
-     .r frames from the right, for pages whose right side carries the content. */
-  .shot {
-    position: absolute; top: var(--shot-y, 124px); left: var(--shot-x, 28px); width: var(--shot-w, 760px); aspect-ratio: 16 / 10;
-    border-radius: 14px; overflow: hidden; background: var(--bg);
-    box-shadow: var(--lift); transition: translate var(--t-move) var(--spring);
+  /* Each tool is one matte clay object on a flat pastel ground: same light (key top-left), same pooled
+     floor shadow, about the same size, at most one small accent, no text. The grounds stay light in
+     both themes, like a photo, so the card's own ink is pinned to the light values. */
+  .card {
+    --ink: #17181a; --ink-3: #3c3b37; --on-ink: #fff; --thumb: #fff; --frost: rgba(255,255,255,.94);
+    background: var(--ground);
   }
-  .card:nth-child(3n+2) .shot { --shot-w: 620px; --shot-y: 148px; --shot-x: 44px; }
-  .card:nth-child(3n+3) .shot { --shot-w: 980px; --shot-y: 112px; --shot-x: 20px; }
-  .card .shot.r { --shot-w: 760px; --shot-y: 136px; left: auto; right: 28px; }
-  .shot.r img { object-position: top right; }
-  .shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
-  .shot .d, :root[data-theme="dark"] .shot .l { display: none; }
-  /* Some tools show one object instead of a screenshot, on the same stage, answering the card's hover */
-  .art { position: absolute; inset: 104px 0 56px; display: grid; place-items: center; }
+  .card:hover { background: var(--ground); }
+  .card .desc { color: rgba(var(--tint), .92); }
+  .moon { --ground: #dcd7cf; --tint: 70, 60, 50; }
+  .pink { --ground: #eaafbb; --tint: 120, 40, 60; }
+  .sky  { --ground: #a9c8e4; --tint: 40, 70, 110; }
+  .sage { --ground: #9db88c; --tint: 40, 70, 30; }
+  .lime { --ground: #d6df9f; --tint: 80, 90, 30; }
+  .art { position: absolute; inset: 100px 0 56px; display: grid; place-items: center; }
   .art > * { grid-area: 1 / 1; }
-  /* Button Hover Lab: one button on blueprint guides; a cursor glides in and presses it */
-  .lab-btn {
-    position: relative; height: 56px; padding: 0 26px 0 30px; border-radius: var(--r-pill);
-    background: var(--ink); color: var(--on-ink); display: inline-flex; align-items: center; gap: 10px;
-    font: 500 17px/1 var(--font-ui); box-shadow: var(--lift);
-    transition: scale var(--t-press) var(--spring-soft) 260ms;
-  }
-  .lab-btn::before, .lab-btn::after { content: ""; position: absolute; pointer-events: none; opacity: .3; }
-  .lab-btn::before { inset: -1px -100vw; border-block: 1px dashed var(--guide); }
-  .lab-btn::after { inset: -100vh -1px; border-inline: 1px dashed var(--guide); }
-  .lab-roll { display: block; height: 17px; overflow: hidden; }
-  .lab-roll span { display: block; transition: translate var(--t-open) var(--spring-soft) 200ms; }
-  .lab-btn svg.i { transition: translate var(--t-open) var(--spring) 200ms; }
-  .lab-cur { width: 26px; height: 26px; translate: 150px 90px; fill: var(--ink); stroke: var(--bg); stroke-width: 1.5; stroke-linejoin: round;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,.2)); transition: translate 420ms var(--settle); }
-  .card:hover .lab-cur, .card:focus-within .lab-cur { translate: 58px 14px; }
-  .card:hover .lab-roll span, .card:focus-within .lab-roll span { translate: 0 -100%; }
-  .card:hover .lab-btn svg.i, .card:focus-within .lab-btn svg.i { translate: 4px 0; }
-  .card:hover .lab-btn, .card:focus-within .lab-btn { scale: .97; }
-  /* WebP Converter: the same picture, heavy then light, sized to its file */
-  .art.webp { display: flex; justify-content: center; align-items: center; gap: 22px; }
-  .file { display: grid; gap: 10px; justify-items: center; transition: scale var(--t-press) var(--spring); }
-  .file .pic {
-    width: var(--px); aspect-ratio: 1; border-radius: 14px; box-shadow: var(--lift);
+  .clay { box-shadow: inset -8px -10px 18px rgba(var(--tint), .22), inset 6px 8px 14px rgba(255,255,255,.45),
+    0 22px 26px -16px rgba(var(--tint), .55); transition: scale var(--t-press) var(--spring), translate var(--t-open) var(--spring), rotate var(--t-open) var(--spring); }
+  /* holographic glitter: sparkle layers on prime periods so no grid shows, over a green-gold sheen */
+  .glitter {
     background:
-      radial-gradient(circle at 68% 34%, #ffd9a8 0 9%, transparent 9.5%),
-      radial-gradient(120% 70% at 20% 105%, #6b4f3a 0 48%, transparent 48.5%),
-      radial-gradient(120% 80% at 90% 112%, #8a6247 0 52%, transparent 52.5%),
-      linear-gradient(#e8794f, var(--ember) 45%, #f2b48c);
+      radial-gradient(circle, #fff 0 1px, transparent 1.6px) 0 0 / 7px 5px,
+      radial-gradient(circle, #ff3d7f 0 1.5px, transparent 2.1px) 3px 2px / 11px 7px,
+      radial-gradient(circle, #2fb4ff 0 1.5px, transparent 2.1px) 7px 5px / 13px 11px,
+      radial-gradient(circle, #ffd400 0 1.5px, transparent 2.1px) 1px 9px / 5px 13px,
+      radial-gradient(circle, #a36bff 0 1.3px, transparent 1.9px) 9px 3px / 17px 7px,
+      linear-gradient(150deg, #9fe07a, #49c98d 30%, #f0d35a 48%, #5cc96e 66%, #b4e36a);
+    transition: background-position 900ms var(--settle), translate 700ms var(--spring), rotate 700ms var(--spring);
   }
-  .file.big { --px: 140px; }
-  .file.small { --px: 60px; }
-  .file b { font: 500 13px/1 var(--font-ui); color: var(--ink); }
-  .file small { font: 400 12px/1 var(--font-code); color: var(--ink-4); margin-top: -4px; }
-  .art.webp > svg.i { width: 20px; height: 20px; color: var(--ink-4); rotate: 45deg; transition: translate var(--t-move) var(--spring); }
-  .card:hover .art.webp > svg.i, .card:focus-within .art.webp > svg.i { translate: 4px 0; }
-  .card:hover .file.small, .card:focus-within .file.small { scale: 1.12; }
-  /* AEO Scanner: a page laid flat in 3D, a scan sweeping it, the quotable passage lifting off */
-  .art.aeo { perspective: 900px; }
-  .slab {
-    position: relative; width: 210px; height: 250px; border-radius: 18px; transform-style: preserve-3d;
-    background: var(--thumb); box-shadow: var(--lift); rotate: x 56deg; transform: rotateZ(-36deg);
-    transition: rotate 600ms var(--settle);
-  }
-  .card:hover .slab, .card:focus-within .slab { rotate: x 50deg; }
-  .slab i { position: absolute; left: 22px; border-radius: 4px; background: rgba(var(--ink-rgb), .16); }
-  .slab .h { top: 24px; width: 120px; height: 14px; background: rgba(var(--ink-rgb), .5); translate: 0 0 8px; }
-  .slab .l1 { top: 54px; width: 160px; height: 6px; }
-  .slab .l2 { top: 68px; width: 130px; height: 6px; }
-  .slab .q, .slab .qs { top: 96px; width: 166px; height: 54px; border-radius: 10px; }
-  .slab .qs { background: rgba(var(--ink-rgb), .12); filter: blur(6px); }
-  .slab .q { background: var(--signal); box-shadow: 0 0 24px color-mix(in srgb, var(--signal) 60%, transparent);
-    translate: 0 0 26px; transition: translate 600ms var(--spring); }
-  .card:hover .slab .q, .card:focus-within .slab .q { translate: 0 0 52px; }
-  .slab .l3 { top: 174px; width: 150px; height: 6px; }
-  .slab .l4 { top: 188px; width: 110px; height: 6px; }
-  .slab .scan {
-    left: 0; right: 0; top: 0; height: 64px; border-radius: 0; transform-origin: top; transform: rotateX(-90deg);
-    background: linear-gradient(color-mix(in srgb, var(--signal) 45%, transparent), transparent);
-    border-top: 2px solid var(--signal); animation: scan 3.6s var(--settle) infinite alternate;
-  }
-  @keyframes scan { to { translate: 0 248px; } }
-  @media (prefers-reduced-motion: reduce) { .slab .scan { animation: none; translate: 0 120px; } }
-  :root[data-theme="dark"] .shot .d { display: block; }
-  .card:hover .shot, .card:focus-within .shot { translate: -6px -8px; }
+  .card:hover .glitter, .card:focus-within .glitter { background-position: 4px 3px, 8px 6px, 12px 9px, 3px 12px, 14px 5px, 0 0; }
+  /* hover lives on the card; each object answers in one move */
+  .card:is(:hover, :focus-within) .lift { translate: 0 -8px; rotate: -4deg; }
+
+  /* Colourbook: a fan of swatches that spreads */
+  .sw { width: 48px; height: 132px; border-radius: 16px; transform-origin: 50% 110%; rotate: calc(var(--i) * 12deg); }
+  .card:is(:hover, :focus-within) .sw { rotate: calc(var(--i) * 18deg); }
+  /* WebP: the same ball, heavy then light */
+  .art.pair { display: flex; justify-content: center; align-items: flex-end; gap: 36px; padding-bottom: 40px; }
+  .ball { width: 132px; aspect-ratio: 1; border-radius: 50%; background: #9cc3e6; }
+  .ball.sm { width: 56px; }
+  .card:is(:hover, :focus-within) .ball.sm { scale: 1.14; }
+  /* Video Compressor: a play button that squashes */
+  .disc { width: 140px; aspect-ratio: 1; border-radius: 50%; background: #f2a1b3; display: grid; place-items: center; }
+  .disc::after { content: ""; width: 44px; height: 50px; margin-left: 8px; background: #fff;
+    clip-path: polygon(0 0, 100% 50%, 0 100%); border-radius: 4px; }
+  .card:is(:hover, :focus-within) .disc { scale: 1.16 .84; }
+  /* Pumice: a pumice stone */
+  .pebble { width: 200px; height: 140px; border-radius: 58% 42% 52% 48% / 56% 50% 50% 44%;
+    background: radial-gradient(circle, rgba(90,80,70,.28) 0 1.6px, transparent 2.4px) 0 0 / 13px 11px,
+      radial-gradient(circle, rgba(90,80,70,.18) 0 1.2px, transparent 2px) 6px 5px / 9px 10px, #d4cec5; }
+  /* Frameshot: a camera; the shutter goes down */
+  .cam { width: 160px; height: 108px; border-radius: 28px; background: #9cc3e6; display: grid; place-items: center; }
+  .cam::before { content: ""; width: 58px; aspect-ratio: 1; border-radius: 50%;
+    background: radial-gradient(circle at 38% 34%, #fff 0 5px, #4a5d78 6px 40%, #2c3a50 70%); box-shadow: 0 0 0 7px #dfeaf5; }
+  .shutter { width: 30px; height: 12px; border-radius: 6px 6px 0 0; background: #f2a1b3; translate: 38px -60px; transition: translate 160ms var(--settle); }
+  .card:is(:hover, :focus-within) .shutter { translate: 38px -56px; }
+  /* Button Hover Lab: one clay button; a cursor glides in and squishes it */
+  .lab-btn { width: 180px; height: 64px; border-radius: var(--r-pill); background: #f2a1b3; transition-delay: 300ms; }
+  .lab-cur { width: 26px; height: 26px; translate: 130px 84px; fill: #fff; stroke: #17181a; stroke-width: 1.5; stroke-linejoin: round;
+    transition: translate 460ms var(--settle); }
+  .card:is(:hover, :focus-within) .lab-cur { translate: 40px 12px; }
+  .card:is(:hover, :focus-within) .lab-btn { scale: 1.04 .9; }
+  /* Rate & Pricing: a stack of coins; the top one hops */
+  .coins { display: grid; justify-items: center; padding-top: 30px; }
+  .coin { width: 128px; height: 44px; border-radius: 50%; background: #f3d57e; margin-top: -24px;
+    box-shadow: inset -6px -6px 12px rgba(150,100,20,.2), inset 4px 4px 10px rgba(255,255,255,.5), 0 10px 0 #d9b04f; }
+  .coins .coin:last-child { box-shadow: inset -6px -6px 12px rgba(150,100,20,.2), inset 4px 4px 10px rgba(255,255,255,.5), 0 10px 0 #d9b04f, 0 30px 26px -14px rgba(var(--tint), .55); }
+  .coin.top { transition: translate var(--t-open) var(--spring), rotate var(--t-open) var(--spring); }
+  .card:is(:hover, :focus-within) .coin.top { translate: 0 -18px; rotate: -6deg; }
+  /* AEO Scanner: a planet that's been found, a glitter star come to rest on its ring */
+  .planet { width: 120px; aspect-ratio: 1; border-radius: 50%; background: #d3e0a6; }
+  .orbit { width: 250px; height: 64px; border-radius: 50%; rotate: -14deg;
+    background: radial-gradient(closest-side, transparent 66%, #c3d394 68% 88%, transparent 90%); }
+  .orbit.front { clip-path: inset(50% 0 0 0); }
+  .star { width: 78px; aspect-ratio: 1; translate: 92px -66px; rotate: 12deg;
+    clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
   .foot { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
     height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
@@ -397,67 +389,67 @@
     </div>
 
     <div class="grid" id="cards">
-      <article class="card" data-kind="app">
+      <article class="card moon" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/colorbook" aria-label="Colourbook source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">202 colour palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/colorbook-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/colorbook-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="sw clay" style="--i:-2;background:#f2a1b3"></span><span class="sw clay" style="--i:-1;background:#9cc3e6"></span><span class="sw clay" style="--i:0;background:#d3e0a6"></span><span class="sw clay" style="--i:1;background:#9db88c"></span><span class="sw clay" style="--i:2;background:#d9435a"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/colorbook/">Colourbook</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="app">
+      <article class="card lime" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
-        <div class="art webp" aria-hidden="true"><span class="file big"><span class="pic"></span><b>PNG</b><small>2.4 MB</small></span><svg class="i"><use href="#i-arrow"/></svg><span class="file small"><span class="pic"></span><b>WebP</b><small>380 KB</small></span></div>
+        <div class="art pair" aria-hidden="true"><span class="ball clay"></span><span class="ball sm clay"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="app">
+      <article class="card sky" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/video-compressor" aria-label="Video Compressor source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/video-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/video-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="disc clay"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card wide" data-kind="system">
+      <article class="card wide pink" data-kind="system">
         <span class="tag">Design system</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pumice" aria-label="Pumice source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">The soft, warm-grey design system this page is set in. Pills, panels, springy motion.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/pumice-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pumice-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="pebble clay lift"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pumice/">Pumice</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card wide" data-kind="reference">
+      <article class="card wide sage" data-kind="reference">
         <span class="tag">Reference</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
-        <div class="art" aria-hidden="true"><span class="lab-btn"><span class="lab-roll"><span>Hover me</span><span>Hover me</span></span><svg class="i"><use href="#i-arrow"/></svg></span><svg class="lab-cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div>
+        <div class="art" aria-hidden="true"><span class="lab-btn clay"></span><svg class="lab-cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="cli">
+      <article class="card moon" data-kind="cli">
         <span class="tag">CLI · Node</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
-        <div class="shot" aria-hidden="true"><img class="l" src="shots/frameshot-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/frameshot-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="shutter"></span><span class="cam clay"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="app">
+      <article class="card sky" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Work out a freelance hourly rate and sanity-check any project quote.</p>
-        <div class="shot r" aria-hidden="true"><img class="l" src="shots/pricing-light.jpg" alt="" loading="lazy" decoding="async"><img class="d" src="shots/pricing-dark.jpg" alt="" loading="lazy" decoding="async"></div>
+        <div class="art" aria-hidden="true"><span class="coins"><span class="coin top"></span><span class="coin"></span><span class="coin"></span><span class="coin"></span></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="app">
+      <article class="card pink" data-kind="app">
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/aeo-scanner" aria-label="AEO Scanner source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
-        <div class="art aeo" aria-hidden="true"><div class="slab"><i class="h"></i><i class="l1"></i><i class="l2"></i><i class="qs"></i><i class="q"></i><i class="l3"></i><i class="l4"></i><i class="scan"></i></div></div>
+        <div class="art" aria-hidden="true"><span class="orbit"></span><span class="planet clay"></span><span class="orbit front"></span><span class="star glitter"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
