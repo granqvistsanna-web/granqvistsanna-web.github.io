@@ -32,7 +32,7 @@
     ".tb-home:hover .tb-eye,.tb-mascot:hover .tb-eye{scale:1.06 .62}" +
     ".tb-home:active .tb-head,.tb-mascot:active .tb-head{scale:1.06 .9;transition-duration:120ms}" +
     // hero size: stands on a soft contact shadow
-    ".tb-mascot{--tb-size:clamp(96px,16vw,136px);display:grid;justify-items:center;-webkit-tap-highlight-color:transparent}" +
+    ".tb-mascot{--tb-size:clamp(96px,16vw,136px);width:max-content;display:grid;justify-items:center;-webkit-tap-highlight-color:transparent}" +
     ".tb-mascot::after{content:'';width:58%;height:10px;border-radius:50%;background:var(--wash-2,rgba(23,24,26,.1));filter:blur(3px)}" +
     ".tb-blink .tb-eye{animation:tb-blink 170ms ease-in-out}" +
     "@keyframes tb-blink{50%{scale:1.2 .1}}" +
