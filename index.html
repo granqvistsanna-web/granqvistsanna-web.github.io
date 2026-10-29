@@ -149,7 +149,8 @@
 
   /* ---- Cards ---- */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); grid-auto-flow: dense; gap: 16px; }
-  /* Two featured cards span two columns: ten tools then fill three or four columns with no orphan. */
+  /* Two featured cards span two columns. Four singles, both wides, four singles: two, three and four
+     columns all fill with no hole, so reading and Tab order match what you see; dense only backfills a filtered grid. */
   /* only once two columns fit at a comfortable width, or the span makes a column the page has no room for */
   @media (min-width: 880px) { .card.wide { grid-column: span 2; } }
   .card {
@@ -483,6 +484,14 @@
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
+      <article class="card" data-kind="cli">
+        <span class="tag">CLI · Node</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div><span class="pic shotout" style="--at:50% 20%"></span></div></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
+      </article>
+
       <article class="card wide" data-kind="system">
         <span class="tag">Design system</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pumice" aria-label="Pumice source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
@@ -497,14 +506,6 @@
         <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
         <div class="art" aria-hidden="true"><div class="ui"><span class="pill ink hov">Start the trial <svg class="i"><use href="#i-arrow"/></svg></span><svg class="cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
-      </article>
-
-      <article class="card" data-kind="cli">
-        <span class="tag">CLI · Node</span>
-        <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div><span class="pic shotout" style="--at:50% 20%"></span></div></div>
-        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
       <article class="card" data-kind="app">
