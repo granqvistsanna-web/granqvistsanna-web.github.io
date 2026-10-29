@@ -7,11 +7,11 @@
 <meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators, Framer plugins and Claude Code skills. Free, open source, no accounts.">
 <meta property="og:title" content="Toolbox — Sanna Granqvist">
 <meta property="og:description" content="Small, sharp tools for design work. Free, open source, no accounts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><circle cx=%2232%22 cy=%2232%22 r=%2230%22 fill=%22%2317181a%22/><rect x=%2223%22 y=%2222%22 width=%227%22 height=%2218%22 rx=%223.5%22 fill=%22%23fff%22/><rect x=%2234%22 y=%2222%22 width=%227%22 height=%2218%22 rx=%223.5%22 fill=%22%23fff%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap">
 <link rel="stylesheet" href="https://granqvistsanna-web.github.io/pumice/tokens.css">
+<script src="mascot.js" defer></script>
 <script>
   /* Set the theme before first paint: a stored choice wins, otherwise the system's. */
   (function () {
@@ -54,17 +54,7 @@
   .bar .wrap { height: 64px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-6); }
   .lead { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
   .mark { display: inline-flex; align-items: center; gap: var(--s-4); color: var(--ink); font-weight: 500; font-size: 15px; text-decoration: none; flex: none; }
-  /* mascot: a black disc with two capsule eyes that look around and blink */
-  .head {
-    position: relative; width: 30px; height: 30px; flex: none; border-radius: 50%;
-    background: var(--ink); display: flex; justify-content: center; align-items: center; gap: 4px;
-    transition: scale var(--t-press) var(--spring-soft);
-  }
-  .mark:hover .head { scale: 1.06; }
-  .mark:active .head { scale: .94; }
-  .eyes { display: flex; gap: 4px; translate: var(--ex, 0) var(--ey, 0); transition: translate 160ms var(--spring-soft); }
-  .eye { width: 4px; height: 9px; border-radius: 2px; background: var(--bg); animation: blink 5.2s infinite; }
-  @keyframes blink { 0%, 93%, 100% { scale: 1 1; } 95% { scale: 1.25 .22; } }
+  .mark { --tb-size: 30px; font-size: 15px; }
   .nav { display: flex; gap: var(--s-1); }
   .nav a {
     height: var(--h-nav); padding: 0 13px; border-radius: var(--r-pill);
@@ -170,13 +160,19 @@
   }
   .card .src { position: absolute; top: 8px; right: 8px; z-index: 2; }
   .face { display: grid; justify-items: center; gap: var(--s-8); text-align: center; }
+  /* the knob is the mascot's squat octagon, with a wash octagon behind it as the ring */
   .knob {
-    width: 64px; height: 64px; border-radius: 50%; background: var(--ink); color: var(--on-ink);
-    display: grid; place-items: center; box-shadow: 0 0 0 10px var(--wash);
-    transition: scale var(--t-move) var(--spring);
+    position: relative; isolation: isolate; width: 84px; height: 84px; color: var(--on-ink);
+    display: grid; place-items: center;
+    transition: scale var(--t-move) var(--spring), rotate 420ms var(--spring);
   }
+  .knob::before, .knob::after { content: ""; position: absolute; -webkit-mask: var(--oct) center/contain no-repeat; mask: var(--oct) center/contain no-repeat; }
+  .knob::before { inset: 0; background: var(--ink); z-index: -1; }
+  .knob::after { inset: -16px; background: var(--wash); z-index: -2; }
+  .knob svg.i { position: relative; }
+  :root { --oct: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='31,22 69,22 91,40 91,64 69,82 31,82 9,64 9,40' fill='%23000' stroke='%23000' stroke-width='14' stroke-linejoin='round'/%3E%3C/svg%3E"); }
   .knob svg.i { width: 26px; height: 26px; stroke-width: 1.75; }
-  .card:hover .knob, .card:focus-within .knob { scale: 1.08; }
+  .card:hover .knob, .card:focus-within .knob { scale: 1.06; rotate: -7deg; }
   .face p { margin: 0; max-width: 30ch; font-size: 13.5px; line-height: 1.5; color: var(--ink-4); text-wrap: balance; }
   .foot { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
@@ -256,7 +252,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0.01ms !important; animation: none !important; }
-    .eyes { translate: none; }
   }
 </style>
 </head>
@@ -290,7 +285,7 @@
 <header class="bar">
   <div class="wrap">
     <div class="lead">
-      <a class="mark" href="#top" aria-label="Toolbox, back to top"><span class="head" aria-hidden="true"><span class="eyes"><span class="eye"></span><span class="eye"></span></span></span><span>Toolbox</span></a>
+      <a class="mark" href="#top" aria-label="Toolbox, back to top" data-toolbox-home><span>Toolbox</span></a>
       <nav class="nav" aria-label="Sections">
         <a href="#tools" aria-current="true">Tools</a>
         <a href="#plugins">Plugins</a>
@@ -465,22 +460,6 @@
 <script>
   (function () {
     var root = document.documentElement;
-
-    // mascot: the eyes look toward the pointer, at most 5px across and 4px up or down
-    var head = document.querySelector(".head"), eyes = head.querySelector(".eyes"), frame = 0, px = 0, py = 0;
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.addEventListener("pointermove", function (e) {
-        px = e.clientX; py = e.clientY;
-        if (frame) return;
-        frame = requestAnimationFrame(function () {
-          frame = 0;
-          var r = head.getBoundingClientRect(), dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height / 2);
-          var d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 160);
-          eyes.style.setProperty("--ex", (dx / d * k * 5).toFixed(2) + "px");
-          eyes.style.setProperty("--ey", (dy / d * k * 4).toFixed(2) + "px");
-        });
-      }, { passive: true });
-    }
 
     // theme
     document.querySelector(".theme").addEventListener("click", function () {
