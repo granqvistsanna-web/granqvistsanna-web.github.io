@@ -236,6 +236,13 @@
   .orbit.front { clip-path: inset(50% 0 0 0); }
   .star { width: 78px; aspect-ratio: 1; translate: 92px -66px; rotate: 12deg;
     clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+  /* Mockup: a clay browser window; a phone slides in front of it */
+  .win { position: relative; width: 184px; height: 128px; border-radius: 24px; background: #9cc3e6; }
+  .win::before { content: ""; position: absolute; width: 9px; height: 9px; margin: 16px 0 0 18px; border-radius: 50%; background: #fff;
+    box-shadow: 15px 0 0 #fff, 30px 0 0 #fff; opacity: .85; }
+  .ph { width: 54px; height: 96px; border-radius: 16px; background: #f2a1b3; translate: 78px 34px; }
+  .card:is(:hover, :focus-within) .win { rotate: -3deg; }
+  .card:is(:hover, :focus-within) .ph { translate: 66px 26px; rotate: 6deg; }
   .foot { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
     height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
@@ -451,6 +458,14 @@
         <p class="desc">Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
         <div class="art" aria-hidden="true"><span class="orbit"></span><span class="planet clay"></span><span class="orbit front"></span><span class="star glitter"></span></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
+      </article>
+
+      <article class="card lime" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/mockup" aria-label="Mockup source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <p class="desc">Drop in screenshots, get browser and phone mockups out, with Framer thumbnail templates.</p>
+        <div class="art" aria-hidden="true"><span class="win clay"></span><span class="ph clay"></span></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/mockup/">Mockup</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
 
