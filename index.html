@@ -2,20 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Toolbox — Sanna Granqvist</title>
 <meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators and Framer plugins. Free, open source, no accounts.">
 <meta property="og:title" content="Toolbox — Sanna Granqvist">
 <meta property="og:description" content="Small, sharp tools for design work. Free, open source, no accounts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%230f0f0f%22/><rect x=%2220%22 y=%2220%22 width=%2224%22 height=%2224%22 rx=%227%22 fill=%22%23f2f2f2%22/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2220%22 fill=%22%2317181a%22/><rect x=%2216%22 y=%2226%22 width=%2232%22 height=%2212%22 rx=%226%22 fill=%22%23f7f7f6%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap">
 <link rel="stylesheet" href="https://granqvistsanna-web.github.io/pumice/tokens.css">
 <script>
-  /* Set the theme before first paint: a stored choice wins, otherwise the
-     system's. Always stamped, so the toggle's label rules have an attribute
-     to read. */
+  /* Set the theme before first paint: a stored choice wins, otherwise the system's. */
   (function () {
     var t;
     try { t = localStorage.getItem("theme"); } catch (e) {}
@@ -25,403 +23,484 @@
 </script>
 <style>
   /* Pumice — https://granqvistsanna-web.github.io/pumice/
-     Tokens, both themes and the system default come from tokens.css. */
+     Tokens, both themes and the system default come from tokens.css; this
+     sheet only lays the page out with them. */
   * { box-sizing: border-box; }
+  html { scroll-padding-top: 80px; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink-2);
-    font-family: var(--font-ui);
-    font-size: 15px;
-    line-height: 1.55;
+    margin: 0; background: var(--bg); color: var(--ink-2);
+    font: 400 15px/1.5 var(--font-ui);
     -webkit-font-smoothing: antialiased;
-    transition: background-color var(--t-fade), color var(--t-fade);
+    transition: background-color var(--t-fade), color var(--t-color);
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+  /* Icons: Lucide geometry on a 24 grid, 2px round stroke, ink-3 at rest */
+  svg.i { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .wrap {
+    max-width: 1440px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
 
-  .page { max-width: 1060px; margin: 0 auto; padding: 72px 28px 96px; }
+  /* ---- Bar ---- */
+  .bar {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--frost);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px); backdrop-filter: saturate(1.4) blur(12px);
+  }
+  .bar .wrap { height: 64px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-6); }
+  .lead { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
+  .mark { display: inline-flex; align-items: center; gap: var(--s-4); color: var(--ink); font-weight: 500; font-size: 15px; text-decoration: none; flex: none; }
+  .mark i { width: 26px; height: 26px; border-radius: 9px; background: var(--ink); display: grid; place-items: center; }
+  .mark i::after { content: ""; width: 13px; height: 5px; border-radius: 3px; background: var(--bg); }
+  .nav { display: flex; gap: var(--s-1); }
+  .nav a {
+    height: var(--h-nav); padding: 0 13px; border-radius: var(--r-pill);
+    display: inline-flex; align-items: center; white-space: nowrap;
+    font: 500 14px/1 var(--font-ui); color: var(--ink-4); text-decoration: none;
+    transition: color var(--t-color), scale var(--t-press) var(--spring-soft);
+  }
+  .nav a:hover, .nav a[aria-current="true"] { color: var(--ink); }
+  .nav a:active { scale: var(--press-link); }
 
-  /* ---- Header ---- */
-  header { display: flex; align-items: flex-start; gap: 20px; }
-  .htext { flex: 1; min-width: 0; }
-  /* The surface ladder is only ~1.1:1 between steps, so an unlabelled plate
-     reads as a stray dot. The hairline gives it an edge and the word gives it
-     a name — both name the destination, not the current state. */
-  .theme-toggle {
-    flex-shrink: 0; margin-top: 5px;
-    height: 40px; padding: 0 15px;
-    display: inline-flex; align-items: center;
-    background: var(--wash); color: var(--ink-2);
-    border: 0; border-radius: var(--r-pill);
-    font-family: inherit; font-size: 13.5px; font-weight: 500; line-height: 1;
-    cursor: pointer; white-space: nowrap;
-    transition: background var(--t-color), color var(--t-color), scale var(--t-press) var(--spring-soft);
+  .find {
+    height: var(--h-field); width: 240px; max-width: 100%; border-radius: var(--r-pill);
+    background: var(--wash); display: flex; align-items: center; gap: var(--s-4);
+    padding: 0 6px 0 14px; color: var(--ink-4); cursor: text;
+    transition: background var(--t-color), box-shadow var(--t-color);
   }
-  .theme-toggle:active { scale: var(--press); }
-  .theme-toggle:hover { background: var(--wash-2); color: var(--ink); }
-  .theme-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
-  .theme-toggle svg.ph { width: 16px; height: 16px; }
-  .theme-toggle .tface { display: inline-flex; align-items: center; gap: 9px; }
-  .theme-toggle .to-dark { display: none; }
-  :root[data-theme="light"] .theme-toggle .to-light { display: none; }
-  :root[data-theme="light"] .theme-toggle .to-dark { display: inline-flex; }
+  .find:focus-within { background: var(--bg); box-shadow: var(--ring); }
+  .find svg.i { width: 16px; height: 16px; }
+  .find input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font: 400 14px/1 var(--font-ui); color: var(--ink); }
+  .find input::placeholder { color: var(--ink-4); }
+  .find input::-webkit-search-cancel-button { display: none; }
+  .kbd { font: 500 11px/1 var(--font-ui); color: var(--ink-4); padding: 5px 7px; }
 
-  h1 {
-    color: var(--ink);
-    font-size: clamp(34px, 5vw, 48px);
-    font-weight: 500; letter-spacing: -0.025em; line-height: 1.05;
-    margin: 0 0 16px; text-wrap: balance;
-  }
-  .lede { max-width: 62ch; color: var(--ink-2); font-size: 16px; margin: 0; }
-
-  section { margin-top: 72px; }
-  .sec-label {
-    display: flex; align-items: baseline; gap: 14px;
-    font-size: 11px; font-weight: 500; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--ink-3);
-    padding-bottom: 14px; border-bottom: 1px solid var(--hairline);
-    margin-bottom: 20px;
-  }
-  .sec-label .n { color: var(--ink-4); font-variant-numeric: tabular-nums; letter-spacing: 0; }
-  .sec-label .count {
-    margin-left: auto; font-variant-numeric: tabular-nums; letter-spacing: 0;
-    color: var(--ink-4); font-weight: 400;
-  }
-
-  /* fill is inherited, so it reaches the <use> shadow content — without this
-     the symbol paths fall back to SVG's default black fill. */
-  svg.ph { width: 1em; height: 1em; flex-shrink: 0; fill: currentColor; }
-
-  /* ---- Tool cards ---- */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: var(--s-4, 10px);
-  }
-  .card {
-    position: relative;
-    display: flex; flex-direction: column; gap: 12px;
-    background: var(--surface); border-radius: var(--r-card);
-    padding: var(--s-9, 20px);
-    transition: background var(--t-color);
-  }
-  .card:hover { background: var(--surface-2); }
-  .card .tile {
-    width: 40px; height: 40px; border-radius: var(--r-inner);
-    display: grid; place-items: center;
-    background: var(--wash); color: var(--ink-2);
-    transition: background var(--t-color), color var(--t-color);
-  }
-  .card .tile svg.ph { width: 20px; height: 20px; }
-  .card:hover .tile { background: var(--wash-2); color: var(--ink); }
-  .card h3 { margin: 2px 0 0; font-size: 16px; font-weight: 500; letter-spacing: -.01em; line-height: 1.3; }
-  .card h3 a {
-    color: var(--ink); text-decoration: none;
-    display: inline-flex; align-items: center; gap: 7px;
-  }
-  /* stretched link — whole card opens the tool */
-  .card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-card); }
-  .card h3 svg.ph {
-    width: 13px; height: 13px; color: var(--ink-3);
-    transition: color var(--t-color), transform var(--t-move) var(--spring);
-  }
-  .card:hover h3 svg.ph { color: var(--ink); transform: translate(1px, -1px); }
-  .card p { margin: 0; font-size: 13.5px; color: var(--ink-3); flex: 1; }
-  .card .meta {
-    display: flex; align-items: center; gap: 12px;
-    padding-top: 14px; border-top: 1px solid var(--hairline);
-  }
-  .card .kind {
-    font-variant-numeric: tabular-nums; font-size: 11px; letter-spacing: .05em;
-    text-transform: uppercase; color: var(--ink-4);
-  }
-  .card .src {
-    position: relative; z-index: 1; margin-left: auto;
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 12.5px; font-weight: 500; color: var(--ink-3);
-    text-decoration: none; padding: 4px 8px; margin-right: -8px; margin-block: -4px;
-    border-radius: var(--r-pill);
-    transition: background var(--t-color), color var(--t-color);
-  }
-  .card .src:hover { background: var(--wash-2); color: var(--ink); }
-  .card .src svg.ph { width: 14px; height: 14px; }
-  .card h3 a:focus-visible { outline: none; }
-  .card:has(h3 a:focus-visible) { outline: 2px solid var(--signal); outline-offset: -2px; }
-  .card .src:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
-
-  /* ---- Plugin rows ---- */
-  .plist { background: var(--surface); border-radius: var(--r-card); overflow: hidden; }
-  .prow {
-    display: flex; align-items: center; gap: 14px;
-    min-height: var(--h-row, 48px); padding: 12px var(--s-7, 16px);
-    color: inherit; text-decoration: none;
-    transition: background var(--t-color);
-  }
-  .prow + .prow { border-top: 1px solid var(--hairline); }
-  .prow:hover { background: var(--surface-2); }
-  .prow:focus-visible { outline: 2px solid var(--signal); outline-offset: -2px; }
-  .prow .picon { color: var(--ink-2); width: 18px; height: 18px; }
-  .prow .pname { font-size: 15px; font-weight: 500; color: var(--ink); white-space: nowrap; }
-  .prow .pdesc {
-    flex: 1; font-size: 13.5px; color: var(--ink-3);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .prow .pkind {
-    font-variant-numeric: tabular-nums; font-size: 11px; letter-spacing: .05em;
-    text-transform: uppercase; color: var(--ink-4); white-space: nowrap;
-  }
-  .prow .parrow {
-    width: 13px; height: 13px; color: var(--ink-3);
-    transition: color var(--t-color), transform var(--t-move) var(--spring);
-  }
-  .prow:hover .parrow { color: var(--ink); transform: translate(1px, -1px); }
-
-  /* ---- Footer ---- */
-  footer {
-    margin-top: 96px; padding-top: 20px; border-top: 1px solid var(--hairline);
-    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
-    font-size: 13px; color: var(--ink-4);
-  }
-  footer .flink {
-    display: inline-flex; align-items: center; gap: 6px;
-    color: var(--ink-3); text-decoration: none; font-weight: 500;
+  .tail { display: flex; align-items: center; justify-content: flex-end; gap: var(--s-4); }
+  .tool {
+    position: relative; width: 36px; height: 36px; border: 0; border-radius: var(--r-pill);
+    background: none; color: var(--ink-3); display: grid; place-items: center; cursor: pointer;
     transition: color var(--t-color);
   }
-  footer .flink:hover { color: var(--ink); }
-  footer .flink svg.ph { width: 15px; height: 15px; }
-  footer .byline { color: var(--ink-2); font-weight: 500; }
-  footer .flink:first-of-type { margin-left: auto; }
+  .tool::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: rgba(var(--ink-rgb), .08); opacity: 0; scale: .86; transition: opacity 150ms, scale var(--t-press) var(--spring-soft); }
+  .tool:hover { color: var(--ink); }
+  .tool:hover::before, .tool:focus-visible::before { opacity: 1; scale: 1; }
+  .tool > svg { position: relative; transition: scale var(--t-press) var(--spring-soft); }
+  .tool:hover > svg { scale: 1.04; }
+  .tool:active > svg { scale: .96; transition-duration: 90ms; }
+  .tool.ring { box-shadow: var(--ring); }
+  .theme .to-dark { display: none; }
+  :root[data-theme="dark"] .theme .to-light { display: none; }
+  :root[data-theme="dark"] .theme .to-dark { display: block; }
 
-  @media (max-width: 720px) {
-    .page { padding-top: 48px; }
-    .prow { flex-wrap: wrap; row-gap: 2px; padding-block: 14px; }
-    .prow .pdesc { flex-basis: 100%; order: 4; white-space: normal; padding-left: 32px; }
-    .prow .pname { flex: 1; min-width: 0; white-space: normal; }
-    .prow .pkind { margin-left: auto; }
-    footer .byline { flex-basis: 100%; }
-    footer .flink:first-of-type { margin-left: 0; }
+  .btn {
+    height: var(--h-button); padding: 0 20px; border: 0; border-radius: var(--r-pill);
+    background: var(--ink); color: var(--on-ink); text-decoration: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: var(--s-4);
+    font: 500 15px/1 var(--font-ui);
+    transition: opacity var(--t-fade), background var(--t-color), scale var(--t-press) var(--spring-soft);
+  }
+  .btn:hover { opacity: .86; }
+  .btn:active { scale: var(--press); }
+  .btn.sm { height: var(--h-nav); padding: 0 16px; font-size: 14px; }
+  .btn.sm svg.i { width: 16px; height: 16px; }
+  .btn.hero:hover { opacity: 1; scale: .98; }
+  .btn.hero:active { scale: var(--press-hero); }
+  .btn.quiet { background: var(--wash); color: var(--ink); }
+  .btn.quiet:hover { opacity: 1; background: var(--wash-2); }
+
+  /* ---- Hero ---- */
+  .hero { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 64px 56px; }
+  .hero > * { animation: rise var(--t-rise) var(--rise) both; }
+  .hero .row { animation-delay: .3s; }
+  @keyframes rise { from { opacity: 0; translate: 0 10px; } }
+  .count {
+    height: 32px; padding: 0 14px; border-radius: var(--r-pill); box-shadow: var(--ring);
+    display: inline-flex; align-items: center; gap: var(--s-4);
+    font: 500 14px/1 var(--font-ui); color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+  .count b { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 20%, transparent); }
+  h1 { margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
+  .lede { margin: 0; max-width: 46ch; font-size: 16px; line-height: 1.55; color: var(--ink-4); text-wrap: balance; }
+  .lede b { font-weight: 400; color: var(--ink); }
+  .row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-4); margin-top: var(--s-2); }
+
+  /* ---- Chips ---- */
+  .chips {
+    display: flex; gap: var(--s-4); overflow-x: auto; scrollbar-width: none;
+    margin-bottom: var(--s-7); padding-block: 2px;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip {
+    height: var(--h-chip); padding: 0 14px; border: 0; border-radius: var(--r-pill); flex: none;
+    background: var(--wash); color: var(--ink-2); font: 500 14px/1 var(--font-ui); cursor: pointer;
+    transition: background var(--t-color), color var(--t-color), scale var(--t-press) var(--spring-soft);
+  }
+  .chip:hover { background: var(--wash-2); color: var(--ink); }
+  .chip:active { scale: var(--press-chip); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+
+  /* ---- Cards ---- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); grid-auto-flow: dense; gap: 14px; }
+  /* Two featured cards span two columns: ten tools then fill three or four columns with no orphan. */
+  @media (min-width: 761px) { .card.wide { grid-column: span 2; } }
+  .card {
+    position: relative; min-height: 340px; border-radius: var(--r-card);
+    background: var(--wash); overflow: hidden;
+    display: grid; place-items: center; padding: 64px 24px 76px;
+  }
+  .card.paper { background: var(--paper-2); }
+  :root[data-theme="dark"] .card.paper { background: var(--wash); }
+  .card .tag {
+    position: absolute; top: 12px; left: 12px; height: var(--h-tag); padding: 0 10px;
+    border-radius: var(--r-pill); background: var(--elev); color: var(--ink);
+    display: inline-flex; align-items: center; font: 500 11px/1 var(--font-ui); letter-spacing: .01em;
+  }
+  .card .src { position: absolute; top: 8px; right: 8px; z-index: 2; }
+  .face { display: grid; justify-items: center; gap: var(--s-8); text-align: center; }
+  .knob {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--ink); color: var(--on-ink);
+    display: grid; place-items: center; box-shadow: 0 0 0 10px var(--wash);
+    transition: scale var(--t-move) var(--spring);
+  }
+  .knob svg.i { width: 26px; height: 26px; stroke-width: 1.75; }
+  .card:hover .knob, .card:focus-within .knob { scale: 1.08; }
+  .face p { margin: 0; max-width: 30ch; font-size: 13.5px; line-height: 1.5; color: var(--ink-4); text-wrap: balance; }
+  .foot { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
+  .name {
+    height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
+    background: var(--frost); color: var(--ink); min-width: 0;
+    display: inline-flex; align-items: center; font: 500 13.5px/1 var(--font-ui);
+    text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .name::after { content: ""; position: absolute; inset: -400px -12px -12px; z-index: 1; border-radius: var(--r-card); }
+  .go {
+    width: var(--h-field); height: var(--h-field); flex: none; border-radius: 50%;
+    background: var(--ink); color: var(--on-ink); display: grid; place-items: center;
+    opacity: 0; translate: 0 6px; transition: opacity var(--t-fade), translate var(--t-move) var(--spring);
+  }
+  .go svg.i { width: 16px; height: 16px; }
+  .card:hover .go, .card:focus-within .go { opacity: 1; translate: none; }
+  .card .src { opacity: 0; transition: opacity var(--t-fade), color var(--t-color); }
+  .card:hover .src, .card:focus-within .src, .card .src:focus-visible { opacity: 1; }
+  .card:has(.name:focus-visible) { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .name:focus-visible { outline: none; }
+  @media (hover: none) {
+    .go, .card .src { opacity: 1; translate: none; }
+  }
+
+  .empty { grid-column: 1 / -1; padding: 48px 24px; border-radius: var(--r-card); background: var(--wash); text-align: center; color: var(--ink-4); }
+  .empty button { margin-top: var(--s-6); }
+
+  /* ---- Sections ---- */
+  section { padding-top: 56px; }
+  .sh { display: flex; align-items: baseline; gap: var(--s-6); margin-bottom: var(--s-8); }
+  .sh h2 { margin: 0; font-size: 26px; line-height: 1.2; font-weight: 500; letter-spacing: -.01em; color: var(--ink); }
+  .sh span { font-size: 14px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+
+  /* ---- Plugins: a menu-like list ---- */
+  .plist { max-width: 760px; padding: 4px; border-radius: var(--r-menu); background: var(--wash); display: grid; gap: 2px; }
+  .prow {
+    min-height: 56px; padding: 10px 16px; border-radius: var(--r-row);
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 2px 14px;
+    text-decoration: none; color: inherit;
+    transition: background var(--t-color);
+  }
+  .prow:hover { background: var(--elev); }
+  .prow > svg.i { color: var(--ink-3); }
+  .prow .pt { min-width: 0; }
+  .prow .pname { display: block; font-size: 15px; font-weight: 500; color: var(--ink); }
+  .prow .pdesc { display: block; font-size: 13.5px; color: var(--ink-4); }
+  .prow .pkind { height: var(--h-tag); padding: 0 10px; border-radius: var(--r-pill); background: var(--wash); display: inline-flex; align-items: center; font: 500 11px/1 var(--font-ui); color: var(--ink-3); white-space: nowrap; }
+  .prow .parrow { width: 16px; height: 16px; color: var(--ink-4); transition: color var(--t-color), translate var(--t-move) var(--spring); }
+  .prow:hover .parrow { color: var(--ink); translate: 1px -1px; }
+
+  /* ---- Footer ---- */
+  footer { margin-top: 96px; padding-block: 24px 40px; border-top: 1px solid var(--hairline); display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-4) var(--s-8); font-size: 13px; color: var(--ink-4); }
+  footer .by { color: var(--ink-2); font-weight: 500; margin-right: auto; }
+  footer a { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-3); text-decoration: none; font-weight: 500; transition: color var(--t-color); }
+  footer a:hover { color: var(--ink); }
+  footer svg.i { width: 15px; height: 15px; }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 900px) {
+    .nav { display: none; }
+  }
+  @media (max-width: 760px) {
+    .bar .wrap { height: 62px; gap: var(--s-5); }
+    .mark span { display: none; }
+    .find { width: 100%; height: var(--h-touch); }
+    .find input { font-size: 16px; }
+    .kbd, .tail .btn { display: none; }
+    .hero { padding-block: 40px 40px; }
+    h1 { font-size: 34px; }
+    .chips { margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); mask-image: linear-gradient(90deg, #000 calc(100% - 64px), transparent); }
+    .chip { height: 38px; padding: 0 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .prow { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .prow .pkind { display: none; }
+    .tool { width: var(--h-touch); height: var(--h-touch); }
   }
   @media (prefers-reduced-motion: reduce) {
-    * { transition-duration: 0.01ms !important; }
+    * { transition-duration: 0.01ms !important; animation: none !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- Phosphor Fill icons — https://phosphoricons.com -->
+<!-- Icons: Lucide geometry (lucide.dev, ISC), drawn as strokes by svg.i -->
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="i-swatches" viewBox="0 0 256 256"><path d="M240,155.91a16,16,0,0,0-1-5.22L219.94,98.48A16,16,0,0,0,199.49,89l-67.81,24.57,12.08-69A16,16,0,0,0,130.84,26L76.17,16.25a15.94,15.94,0,0,0-18.47,13l-25,143.12A43.82,43.82,0,0,0,75.78,224H224a16,16,0,0,0,16-16ZM76,196a16,16,0,1,1,16-16A16,16,0,0,1,76,196Zm42.72-8.38,9.78-55.92L204.92,104,224,156.11,116.78,195A44.89,44.89,0,0,0,118.72,187.62ZM224,208H127.74L224,173.11Z"/></symbol>
-  <symbol id="i-image" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM48,48H208v77.38l-24.69-24.7a16,16,0,0,0-22.62,0L53.37,208H48ZM80,96a16,16,0,1,1,16,16A16,16,0,0,1,80,96Z"/></symbol>
-  <symbol id="i-video" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM164.44,134.66l-48,32A8,8,0,0,1,104,160V96a8,8,0,0,1,12.44-6.66l48,32a8,8,0,0,1,0,13.32Z"/></symbol>
-  <symbol id="i-camera" viewBox="0 0 256 256"><path d="M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.71,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56Zm-44,76a36,36,0,1,1-36-36A36,36,0,0,1,164,132Z"/></symbol>
-  <symbol id="i-stack" viewBox="0 0 256 256"><path d="M220,169.09l-92,53.65L36,169.09A8,8,0,0,0,28,182.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,169.09Z"/><path d="M220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09Z"/><path d="M28,86.91l96,56a8,8,0,0,0,8.06,0l96-56a8,8,0,0,0,0-13.82l-96-56a8,8,0,0,0-8.06,0l-96,56a8,8,0,0,0,0,13.82Z"/></symbol>
-  <symbol id="i-calc" viewBox="0 0 256 256"><path d="M200,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V40A16,16,0,0,0,200,24ZM88,200a12,12,0,1,1,12-12A12,12,0,0,1,88,200Zm0-40a12,12,0,1,1,12-12A12,12,0,0,1,88,160Zm40,40a12,12,0,1,1,12-12A12,12,0,0,1,128,200Zm0-40a12,12,0,1,1,12-12A12,12,0,0,1,128,160Zm40,40a12,12,0,1,1,12-12A12,12,0,0,1,168,200Zm0-40a12,12,0,1,1,12-12A12,12,0,0,1,168,160Zm16-56a8,8,0,0,1-8,8H80a8,8,0,0,1-8-8V64a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8Z"/></symbol>
-  <symbol id="i-gauge" viewBox="0 0 256 256"><path d="M240,152v24a16,16,0,0,1-16,16H115.93a4,4,0,0,1-3.24-6.35L174.27,101a8.21,8.21,0,0,0-1.37-11.3,8,8,0,0,0-11.37,1.61l-72,99.06A4,4,0,0,1,86.25,192H32a16,16,0,0,1-16-16V153.13c0-1.79,0-3.57.13-5.33a4,4,0,0,1,4-3.8H48a8,8,0,0,0,8-8.53A8.17,8.17,0,0,0,47.73,128H23.92a4,4,0,0,1-3.87-5c12-43.84,49.66-77.13,95.52-82.28a4,4,0,0,1,4.43,4V72a8,8,0,0,0,8.53,8A8.17,8.17,0,0,0,136,71.73V44.67a4,4,0,0,1,4.43-4A112.18,112.18,0,0,1,236.23,123a4,4,0,0,1-3.88,5H208.27a8.17,8.17,0,0,0-8.25,7.47,8,8,0,0,0,8,8.53h27.92a4,4,0,0,1,4,3.86C240,149.23,240,150.61,240,152Z"/></symbol>
-  <symbol id="i-wave" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm-4.78,91.44c-16.68,35-31.06,50.56-46.65,50.56-19.68,0-31.39-24.56-43.79-50.56C112,113,101,90,91.43,90c-3.74,0-14.37,4-32.21,41.44a8,8,0,0,1-14.44-6.88C61.46,89.59,75.84,74,91.43,74c19.68,0,31.39,24.56,43.79,50.56C144,143,155,166,164.57,166c3.74,0,14.37-4,32.21-41.44a8,8,0,1,1,14.44,6.88Z"/></symbol>
-  <symbol id="i-timer" viewBox="0 0 256 256"><path d="M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm45.66,61.66-40,40a8,8,0,0,1-11.32-11.32l40-40a8,8,0,0,1,11.32,11.32ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z"/></symbol>
-  <symbol id="i-magnify" viewBox="0 0 256 256"><path d="M168,112a56,56,0,1,1-56-56A56,56,0,0,1,168,112Zm61.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88,88,0,1,1,11.32-11.31l50.06,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z"/></symbol>
-  <symbol id="i-cursor" viewBox="0 0 256 256"><path d="M220.49,190.83a12,12,0,0,1,0,17L207.8,220.49a12,12,0,0,1-17,0l-56.56-56.57L115,214.09c0,.1-.08.21-.13.32a15.83,15.83,0,0,1-14.6,9.59l-.79,0a15.83,15.83,0,0,1-14.41-11L32.8,52.92A16,16,0,0,1,52.92,32.8L213,85.07a16,16,0,0,1,1.41,29.8l-.32.13-50.17,19.27ZM96,32a8,8,0,0,0,8-8V16a8,8,0,0,0-16,0v8A8,8,0,0,0,96,32ZM16,104h8a8,8,0,0,0,0-16H16a8,8,0,0,0,0,16ZM124.42,39.16a8,8,0,0,0,10.74-3.58l8-16a8,8,0,0,0-14.31-7.16l-8,16A8,8,0,0,0,124.42,39.16Zm-96,81.69-16,8a8,8,0,0,0,7.16,14.31l16-8a8,8,0,1,0-7.16-14.31Z"/></symbol>
-  <symbol id="i-sun" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23Z"/></symbol>
-  <symbol id="i-robot" viewBox="0 0 256 256"><path d="M200,48H136V16a8,8,0,0,0-16,0V48H56A32,32,0,0,0,24,80V192a32,32,0,0,0,32,32H200a32,32,0,0,0,32-32V80A32,32,0,0,0,200,48ZM172,96a12,12,0,1,1-12,12A12,12,0,0,1,172,96ZM96,184H80a16,16,0,0,1,0-32H96ZM84,120a12,12,0,1,1,12-12A12,12,0,0,1,84,120Zm60,64H112V152h32Zm32,0H160V152h16a16,16,0,0,1,0,32Z"/></symbol>
-  <symbol id="i-arrow" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-13.66,5.66L140,127.31,69.66,197.66a8,8,0,0,1-11.32-11.32L128.69,116,82.34,69.66A8,8,0,0,1,88,56H192A8,8,0,0,1,200,64Z"/></symbol>
-  <symbol id="i-github" viewBox="0 0 256 256"><path d="M216,104v8a56.06,56.06,0,0,1-48.44,55.47A39.8,39.8,0,0,1,176,192v40a8,8,0,0,1-8,8H104a8,8,0,0,1-8-8V216H72a40,40,0,0,1-40-40A24,24,0,0,0,8,152a8,8,0,0,1,0-16,40,40,0,0,1,40,40,24,24,0,0,0,24,24H96v-8a39.8,39.8,0,0,1,8.44-24.53A56.06,56.06,0,0,1,56,112v-8a58.14,58.14,0,0,1,7.69-28.32A59.78,59.78,0,0,1,69.07,28,8,8,0,0,1,76,24a59.75,59.75,0,0,1,48,24h24a59.75,59.75,0,0,1,48-24,8,8,0,0,1,6.93,4,59.74,59.74,0,0,1,5.37,47.68A58,58,0,0,1,216,104Z"/></symbol>
-  <symbol id="i-linkedin" viewBox="0 0 256 256"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24ZM96,176a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0ZM88,96a12,12,0,1,1,12-12A12,12,0,0,1,88,96Zm96,80a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140Z"/></symbol>
-  <symbol id="i-globe" viewBox="0 0 256 256"><path d="M128,24h0A104,104,0,1,0,232,128,104.12,104.12,0,0,0,128,24Zm78.36,64H170.71a135.28,135.28,0,0,0-22.3-45.6A88.29,88.29,0,0,1,206.37,88ZM216,128a87.61,87.61,0,0,1-3.33,24H174.16a157.44,157.44,0,0,0,0-48h38.51A87.61,87.61,0,0,1,216,128ZM128,43a115.27,115.27,0,0,1,26,45H102A115.11,115.11,0,0,1,128,43ZM102,168H154a115.11,115.11,0,0,1-26,45A115.27,115.27,0,0,1,102,168Zm-3.9-16a140.84,140.84,0,0,1,0-48h59.88a140.84,140.84,0,0,1,0,48Zm50.35,61.6a135.28,135.28,0,0,0,22.3-45.6h35.66A88.29,88.29,0,0,1,148.41,213.6Z"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.12a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.55-2.5 5.55-5.55C21.97 6.01 17.46 2 12 2z"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.22 3.48a.5.5 0 0 0 .78-.42V7.87a.5.5 0 0 0-.75-.43L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+  <symbol id="i-pointer" viewBox="0 0 24 24"><path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.04 9.69a.5.5 0 0 1 .65-.65l11 4.5a.5.5 0 0 1-.07.95l-4.35 1.04a1 1 0 0 0-.74.74l-1.04 4.35a.5.5 0 0 1-.95.07z"/></symbol>
+  <symbol id="i-calc" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M8 6h8"/><path d="M16 14v4"/><path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></symbol>
+  <symbol id="i-cone" viewBox="0 0 24 24"><path d="m7 11 4.08 10.35a1 1 0 0 0 1.84 0L17 11"/><path d="M17 7A5 5 0 0 0 7 7"/><path d="M17 7a2 2 0 0 1 0 4H7a2 2 0 0 1 0-4"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></symbol>
+  <symbol id="i-spline" viewBox="0 0 24 24"><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M5 17A12 12 0 0 1 17 5"/></symbol>
+  <symbol id="i-timer" viewBox="0 0 24 24"><path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/></symbol>
+  <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-2.07 1.41-1.41M17.66 6.34l1.41-1.41M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></symbol>
 </svg>
 
-<div class="page">
-
-  <header>
-    <div class="htext">
-      <h1>Toolbox</h1>
-      <p class="lede">Tools for design work. Free, open source, no accounts.</p>
+<header class="bar">
+  <div class="wrap">
+    <div class="lead">
+      <a class="mark" href="#top" aria-label="Toolbox, back to top"><i></i><span>Toolbox</span></a>
+      <nav class="nav" aria-label="Sections">
+        <a href="#tools" aria-current="true">Tools</a>
+        <a href="#plugins">Plugins</a>
+      </nav>
     </div>
-    <button class="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch to light theme">
-      <span class="tface to-light"><svg class="ph"><use href="#i-sun"/></svg>Light</span>
-      <span class="tface to-dark"><svg class="ph"><use href="#i-moon"/></svg>Dark</span>
-    </button>
-  </header>
+    <label class="find" for="q">
+      <svg class="i"><use href="#i-search"/></svg>
+      <input id="q" type="search" placeholder="Search" autocomplete="off" aria-label="Search tools and plugins">
+      <span class="kbd" aria-hidden="true">⌘K</span>
+    </label>
+    <div class="tail">
+      <button class="tool ring theme" type="button" aria-label="Switch theme">
+        <svg class="i to-light" style="width:16px;height:16px"><use href="#i-moon"/></svg>
+        <svg class="i to-dark" style="width:16px;height:16px"><use href="#i-sun"/></svg>
+      </button>
+      <a class="btn sm" href="https://github.com/granqvistsanna-web"><svg class="i"><use href="#i-github"/></svg>GitHub</a>
+    </div>
+  </div>
+</header>
 
-  <!-- ================= TOOLS ================= -->
-  <section>
-    <div class="sec-label"><span class="n">01</span> Tools <span class="count">10</span></div>
-    <div class="cards">
+<main class="wrap" id="top">
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-swatches"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/colorbook/">Colourbook <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>202 color palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p>
-        <div class="meta">
-          <span class="kind">Web app</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/colorbook"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+  <div class="hero">
+    <span class="count"><b></b>10 tools · 5 plugins</span>
+    <h1>Toolbox</h1>
+    <p class="lede">Small, sharp <b>tools for design work</b> and <b>Framer plugins</b>. Free, open source, no accounts.</p>
+    <div class="row">
+      <a class="btn hero" href="#tools">Browse the tools</a>
+      <a class="btn quiet" href="https://github.com/granqvistsanna-web">Source on GitHub</a>
+    </div>
+  </div>
+
+  <section id="tools" style="padding-top:0">
+    <div class="chips" role="group" aria-label="Filter tools">
+      <button class="chip" type="button" data-kind="" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-kind="app" aria-pressed="false">Web apps</button>
+      <button class="chip" type="button" data-kind="system" aria-pressed="false">Design systems</button>
+      <button class="chip" type="button" data-kind="reference" aria-pressed="false">Reference</button>
+      <button class="chip" type="button" data-kind="cli" aria-pressed="false">CLI</button>
+      <button class="chip" type="button" data-kind="site" aria-pressed="false">Websites</button>
+    </div>
+
+    <div class="grid" id="cards">
+      <article class="card" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/colorbook" aria-label="Colourbook source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-palette"/></svg></span><p>202 colour palettes. Copy any hex, export as CSS, SCSS, Tailwind or JSON.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/colorbook/">Colourbook</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-image"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
-        <div class="meta">
-          <span class="kind">Web app</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/image-compressor"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-image"/></svg></span><p>Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-video"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p>
-        <div class="meta">
-          <span class="kind">Web app</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/video-compressor"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/video-compressor" aria-label="Video Compressor source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-video"/></svg></span><p>Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-camera"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/frameshot/">Frameshot <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
-        <div class="meta">
-          <span class="kind">CLI · Node</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/frameshot"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card paper wide" data-kind="system">
+        <span class="tag">Design system</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/pumice" aria-label="Pumice source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-layers"/></svg></span><p>The soft, warm-grey design system this page is set in. Pills, panels, springy motion.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pumice/">Pumice</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-stack"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/graphite-console/">Graphite Console <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>A monochrome, dark-only design system. One grey ladder, white as the only accent.</p>
-        <div class="meta">
-          <span class="kind">Design system</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/graphite-console"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card wide" data-kind="reference">
+        <span class="tag">Reference</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-pointer"/></svg></span><p>Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-stack"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/pumice/">Pumice <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>The soft, warm-grey design system this page is set in. Pill controls, springy button motion, panels and phone patterns.</p>
-        <div class="meta">
-          <span class="kind">Design system</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/pumice"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="system">
+        <span class="tag">Design system</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/graphite-console" aria-label="Graphite Console source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-layers"/></svg></span><p>A monochrome, dark-only design system. One grey ladder, white as the only accent.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/graphite-console/">Graphite Console</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-cursor"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Button hover animations you can actually hover, tab and press. With notes on porting each one to Framer.</p>
-        <div class="meta">
-          <span class="kind">Reference</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/button-hover-lab"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="cli">
+        <span class="tag">CLI · Node</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-camera"/></svg></span><p>Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-calc"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Work out a freelance hourly rate and sanity-check any project quote.</p>
-        <div class="meta">
-          <span class="kind">Web app</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/pricing"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-calc"/></svg></span><p>Work out a freelance hourly rate and sanity-check any project quote.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-robot"/></svg></div>
-        <h3><a href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p>
-        <div class="meta">
-          <span class="kind">Web app</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/aeo-scanner"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="app">
+        <span class="tag">Web app</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/aeo-scanner" aria-label="AEO Scanner source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-bot"/></svg></span><p>Can ChatGPT, Claude and Perplexity find and quote a page? Scan a URL, get a readiness report.</p></div>
+        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/aeo-scanner/">AEO Scanner</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card">
-        <div class="tile"><svg class="ph"><use href="#i-globe"/></svg></div>
-        <h3><a href="https://www.kalorisnalglass.se/">Kalorisnål Glass <svg class="ph"><use href="#i-arrow"/></svg></a></h3>
-        <p>Sweden's low-calorie ice creams 2026, ranked per piece — from 32 kcal and up.</p>
-        <div class="meta">
-          <span class="kind">Website</span>
-          <a class="src" href="https://github.com/granqvistsanna-web/glass"><svg class="ph"><use href="#i-github"/></svg>Source</a>
-        </div>
+      <article class="card" data-kind="site">
+        <span class="tag">Website</span>
+        <a class="tool src" href="https://github.com/granqvistsanna-web/glass" aria-label="Kalorisnål Glass source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        <div class="face"><span class="knob"><svg class="i"><use href="#i-cone"/></svg></span><p>Sweden's low-calorie ice creams 2026, ranked per piece — from 32 kcal and up.</p></div>
+        <div class="foot"><a class="name" href="https://www.kalorisnalglass.se/">Kalorisnål Glass</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
+      <div class="empty" id="empty" hidden>
+        <div>Nothing matches “<span id="empty-q"></span>”.</div>
+        <button class="btn quiet sm" type="button" id="clear">Clear search</button>
+      </div>
     </div>
   </section>
 
-  <!-- ================= PLUGINS ================= -->
-  <section>
-    <div class="sec-label"><span class="n">02</span> Plugins <span class="count">05</span></div>
-    <div class="plist">
-
+  <section id="plugins">
+    <div class="sh"><h2>Plugins</h2><span id="pcount">5</span></div>
+    <div class="plist" id="plist">
       <a class="prow" href="https://github.com/granqvistsanna-web/bandwidth-plugin">
-        <svg class="ph picon"><use href="#i-gauge"/></svg>
-        <span class="pname">Bandwidth</span>
-        <span class="pdesc">Page-weight analysis — flags heavy assets and suggests fixes</span>
+        <svg class="i"><use href="#i-gauge"/></svg>
+        <span class="pt"><span class="pname">Bandwidth</span><span class="pdesc">Page-weight analysis — flags heavy assets and suggests fixes</span></span>
         <span class="pkind">Framer</span>
-        <svg class="ph parrow"><use href="#i-arrow"/></svg>
+        <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
-
       <a class="prow" href="https://github.com/granqvistsanna-web/motion-curve">
-        <svg class="ph picon"><use href="#i-wave"/></svg>
-        <span class="pname">Motion Curve</span>
-        <span class="pdesc">Bezier curve editor for animation easing</span>
+        <svg class="i"><use href="#i-spline"/></svg>
+        <span class="pt"><span class="pname">Motion Curve</span><span class="pdesc">Bezier curve editor for animation easing</span></span>
         <span class="pkind">Framer</span>
-        <svg class="ph parrow"><use href="#i-arrow"/></svg>
+        <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
-
       <a class="prow" href="https://github.com/granqvistsanna-web/pomodoro">
-        <svg class="ph picon"><use href="#i-timer"/></svg>
-        <span class="pname">Pomodoro</span>
-        <span class="pdesc">Pomodoro-style focus timer</span>
+        <svg class="i"><use href="#i-timer"/></svg>
+        <span class="pt"><span class="pname">Pomodoro</span><span class="pdesc">Pomodoro-style focus timer</span></span>
         <span class="pkind">Framer</span>
-        <svg class="ph parrow"><use href="#i-arrow"/></svg>
+        <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
-
       <a class="prow" href="https://github.com/granqvistsanna-web/framer-audit-plugin">
-        <svg class="ph picon"><use href="#i-magnify"/></svg>
-        <span class="pname">Framer Audit</span>
-        <span class="pdesc">Read-only design-QA audit with suggested fixes</span>
+        <svg class="i"><use href="#i-scan"/></svg>
+        <span class="pt"><span class="pname">Framer Audit</span><span class="pdesc">Read-only design-QA audit with suggested fixes</span></span>
         <span class="pkind">Claude Code</span>
-        <svg class="ph parrow"><use href="#i-arrow"/></svg>
+        <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
-
       <a class="prow" href="https://github.com/granqvistsanna-web/framer-launch-prep">
-        <svg class="ph picon"><use href="#i-gauge"/></svg>
-        <span class="pname">Framer Launch Prep</span>
-        <span class="pdesc">Pre-launch pass for Lighthouse — images, alt text, schema, SEO and accessibility</span>
+        <svg class="i"><use href="#i-rocket"/></svg>
+        <span class="pt"><span class="pname">Framer Launch Prep</span><span class="pdesc">Pre-launch pass for Lighthouse — images, alt text, schema, SEO and accessibility</span></span>
         <span class="pkind">Claude Code</span>
-        <svg class="ph parrow"><use href="#i-arrow"/></svg>
+        <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
-
     </div>
   </section>
 
   <footer>
-    <span class="byline">Sanna Granqvist</span>
-    <a class="flink" href="https://github.com/granqvistsanna-web"><svg class="ph"><use href="#i-github"/></svg>GitHub</a>
-    <a class="flink" href="https://www.linkedin.com/in/sanna-granqvist-66b45ab7"><svg class="ph"><use href="#i-linkedin"/></svg>LinkedIn</a>
-    <a class="flink" href="https://www.framer.com/@sanna-granqvist"><svg class="ph"><use href="#i-globe"/></svg>Framer</a>
+    <span class="by">Sanna Granqvist</span>
+    <a href="https://github.com/granqvistsanna-web"><svg class="i"><use href="#i-github"/></svg>GitHub</a>
+    <a href="https://www.linkedin.com/in/sanna-granqvist-66b45ab7"><svg class="i"><use href="#i-linkedin"/></svg>LinkedIn</a>
+    <a href="https://www.framer.com/@sanna-granqvist"><svg class="i"><use href="#i-globe"/></svg>Framer</a>
   </footer>
-
-</div>
+</main>
 
 <script>
   (function () {
     var root = document.documentElement;
-    var btn = document.querySelector(".theme-toggle");
-    function relabel() {
-      var text = root.dataset.theme === "light" ? "Switch to dark theme" : "Switch to light theme";
-      btn.setAttribute("aria-label", text);
-      btn.setAttribute("title", text);
-    }
-    relabel();
-    btn.addEventListener("click", function () {
+
+    // theme
+    document.querySelector(".theme").addEventListener("click", function () {
       root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
       try { localStorage.setItem("theme", root.dataset.theme); } catch (e) {}
-      relabel();
     });
+
+    // filter: chips by kind, search by name and description, both at once
+    var q = document.getElementById("q"), kind = "";
+    var cards = [].slice.call(document.querySelectorAll(".card"));
+    var rows = [].slice.call(document.querySelectorAll(".prow"));
+    var empty = document.getElementById("empty");
+    function text(el) { return el.textContent.toLowerCase(); }
+    function apply() {
+      var term = q.value.trim().toLowerCase(), shown = 0;
+      cards.forEach(function (c) {
+        var on = (!kind || c.dataset.kind === kind) && (!term || text(c).indexOf(term) > -1);
+        c.hidden = !on; if (on) shown++;
+      });
+      var pshown = 0;
+      rows.forEach(function (r) { var on = !term || text(r).indexOf(term) > -1; r.hidden = !on; if (on) pshown++; });
+      document.getElementById("pcount").textContent = pshown;
+      document.getElementById("plugins").hidden = !pshown;
+      empty.hidden = shown > 0;
+      document.getElementById("empty-q").textContent = term || kind;
+    }
+    q.addEventListener("input", apply);
+    document.querySelectorAll(".chip").forEach(function (b) {
+      b.addEventListener("click", function () {
+        kind = b.dataset.kind;
+        document.querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+        apply();
+      });
+    });
+    document.getElementById("clear").addEventListener("click", function () {
+      q.value = ""; kind = "";
+      document.querySelectorAll(".chip").forEach(function (x, i) { x.setAttribute("aria-pressed", i === 0); });
+      apply(); q.focus();
+    });
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); q.focus(); q.select(); }
+      else if (e.key === "Escape" && document.activeElement === q) { q.value = ""; apply(); q.blur(); }
+    });
+
+    // nav: mark the section in view
+    var links = [].slice.call(document.querySelectorAll(".nav a"));
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting || e.target.hidden) return;
+        links.forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + e.target.id); });
+      });
+    }, { rootMargin: "-45% 0px -45% 0px" });
+    ["tools", "plugins"].forEach(function (id) { io.observe(document.getElementById(id)); });
   })();
 </script>
 
