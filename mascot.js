@@ -4,7 +4,8 @@
      <a href="https://granqvistsanna-web.github.io/" data-toolbox-home>Toolbox</a>
    The script draws the mascot into each [data-toolbox-home], gives it the
    .tb-home look, and sets the page's favicon to match. Colours come from the
-   page's --ink and --bg (Pumice), with fallbacks. On phones, a mark followed
+   page's --ink and --bg (Pumice), with fallbacks. For a large decorative
+   mascot (no link), use <span data-toolbox-mascot></span>. On phones, a mark followed
    by .tb-sep drops its label so "Toolbox / tool" fits one bar. */
 (function () {
   var PTS = "32,24 68,24 89,41 89,63 68,80 32,80 11,63 11,41";
@@ -27,9 +28,12 @@
     ".tb-oct{fill:var(--ink,#17181a);stroke:var(--ink,#17181a)}" +
     ".tb-eye{fill:var(--bg,#fff);transform-box:fill-box;transform-origin:50% 60%;transition:scale 220ms " + SOFT + "}" +
     // hover: a small happy tilt and a soft squint; press: a squish
-    ".tb-home:hover .tb-face{rotate:calc(var(--tb-tilt,0deg) - 8deg)}" +
-    ".tb-home:hover .tb-eye{scale:1.06 .62}" +
-    ".tb-home:active .tb-head{scale:1.06 .9;transition-duration:120ms}" +
+    ".tb-home:hover .tb-face,.tb-mascot:hover .tb-face{rotate:calc(var(--tb-tilt,0deg) - 8deg)}" +
+    ".tb-home:hover .tb-eye,.tb-mascot:hover .tb-eye{scale:1.06 .62}" +
+    ".tb-home:active .tb-head,.tb-mascot:active .tb-head{scale:1.06 .9;transition-duration:120ms}" +
+    // hero size: stands on a soft contact shadow
+    ".tb-mascot{--tb-size:clamp(96px,16vw,136px);display:grid;justify-items:center;-webkit-tap-highlight-color:transparent}" +
+    ".tb-mascot::after{content:'';width:58%;height:10px;border-radius:50%;background:var(--wash-2,rgba(23,24,26,.1));filter:blur(3px)}" +
     ".tb-blink .tb-eye{animation:tb-blink 170ms ease-in-out}" +
     "@keyframes tb-blink{50%{scale:1.2 .1}}" +
     ".tb-sep{color:var(--ink-4,#6f6e68);font:400 16px/1 var(--font-ui,Inter,sans-serif);margin:0 2px}" +
@@ -49,10 +53,11 @@
 
   var heads = [];
   function draw() {
-    document.querySelectorAll("[data-toolbox-home]").forEach(function (a) {
+    document.querySelectorAll("[data-toolbox-home],[data-toolbox-mascot]").forEach(function (a) {
       if (a.querySelector(".tb-head")) return;
-      a.classList.add("tb-home");
-      if (!a.getAttribute("aria-label")) a.setAttribute("aria-label", (a.textContent.trim() || "Toolbox") + ", home");
+      if (a.hasAttribute("data-toolbox-mascot")) a.classList.add("tb-mascot"), a.setAttribute("aria-hidden", "true");
+      else a.classList.add("tb-home");
+      if (!a.getAttribute("aria-label") && !a.hasAttribute("data-toolbox-mascot")) a.setAttribute("aria-label", (a.textContent.trim() || "Toolbox") + ", home");
       [].slice.call(a.childNodes).forEach(function (n) {
         if (n.nodeType === 3 && n.textContent.trim()) {
           var s = document.createElement("span"); s.className = "tb-label"; s.textContent = n.textContent.trim(); n.replaceWith(s);
