@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Toolbox — Sanna Granqvist</title>
-<meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators and Framer plugins. Free, open source, no accounts.">
+<meta name="description" content="Small, sharp tools for design work — palette libraries, screenshot CLIs, image converters, calculators, Framer plugins and Claude Code skills. Free, open source, no accounts.">
 <meta property="og:title" content="Toolbox — Sanna Granqvist">
 <meta property="og:description" content="Small, sharp tools for design work. Free, open source, no accounts.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2220%22 fill=%22%2317181a%22/><rect x=%2216%22 y=%2226%22 width=%2232%22 height=%2212%22 rx=%226%22 fill=%22%23f7f7f6%22/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><path d=%22M32 4C14 4 4 16 4 33c0 15 11 27 28 27s28-12 28-27C60 16 50 4 32 4z%22 fill=%22%2317181a%22/><ellipse cx=%2223%22 cy=%2232%22 rx=%227.5%22 ry=%228.5%22 fill=%22%23fff%22/><ellipse cx=%2241%22 cy=%2232%22 rx=%227.5%22 ry=%228.5%22 fill=%22%23fff%22/><circle cx=%2225%22 cy=%2230%22 r=%223.6%22 fill=%22%2317181a%22/><circle cx=%2243%22 cy=%2230%22 r=%223.6%22 fill=%22%2317181a%22/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap">
@@ -54,8 +54,22 @@
   .bar .wrap { height: 64px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: var(--s-6); }
   .lead { display: flex; align-items: center; gap: var(--s-8); min-width: 0; }
   .mark { display: inline-flex; align-items: center; gap: var(--s-4); color: var(--ink); font-weight: 500; font-size: 15px; text-decoration: none; flex: none; }
-  .mark i { width: 26px; height: 26px; border-radius: 9px; background: var(--ink); display: grid; place-items: center; }
-  .mark i::after { content: ""; width: 13px; height: 5px; border-radius: 3px; background: var(--bg); }
+  .head {
+    position: relative; width: 30px; height: 28px; flex: none;
+    border-radius: 48% 48% 44% 44% / 56% 56% 44% 44%;
+    background: var(--ink); display: flex; justify-content: center; align-items: center; gap: 4px;
+    padding-bottom: 2px; transition: scale var(--t-press) var(--spring-soft);
+  }
+  .mark:hover .head { scale: 1.06; }
+  .mark:active .head { scale: .94; }
+  .eye {
+    width: 8px; height: 9px; border-radius: 50%; background: var(--bg);
+    display: grid; place-items: center; overflow: hidden;
+    animation: blink 5.2s infinite;
+  }
+  .eye:last-child { animation-delay: .04s; }
+  .eye b { width: 4px; height: 4px; border-radius: 50%; background: var(--ink); translate: var(--px, 0) var(--py, 0); transition: translate 120ms var(--spring-soft); }
+  @keyframes blink { 0%, 93%, 100% { scale: 1 1; } 95% { scale: 1 .1; } }
   .nav { display: flex; gap: var(--s-1); }
   .nav a {
     height: var(--h-nav); padding: 0 13px; border-radius: var(--r-pill);
@@ -113,9 +127,9 @@
   .btn.quiet:hover { opacity: 1; background: var(--wash-2); }
 
   /* ---- Hero ---- */
-  .hero { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 64px 56px; }
-  .hero > * { animation: rise var(--t-rise) var(--rise) both; }
-  .hero .row { animation-delay: .3s; }
+  .intro { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 64px 56px; }
+  .intro > * { animation: rise var(--t-rise) var(--rise) both; }
+  .intro .row { animation-delay: .3s; }
   @keyframes rise { from { opacity: 0; translate: 0 10px; } }
   .count {
     height: 32px; padding: 0 14px; border-radius: var(--r-pill); box-shadow: var(--ring);
@@ -199,7 +213,7 @@
   section { padding-top: 56px; }
   .sh { display: flex; align-items: baseline; gap: var(--s-6); margin-bottom: var(--s-8); }
   .sh h2 { margin: 0; font-size: 26px; line-height: 1.2; font-weight: 500; letter-spacing: -.01em; color: var(--ink); }
-  .sh span { font-size: 14px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
+  .sh .n { font-size: 14px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
 
   /* ---- Plugins: a menu-like list ---- */
   .plist { max-width: 760px; padding: 4px; border-radius: var(--r-menu); background: var(--wash); display: grid; gap: 2px; }
@@ -236,7 +250,7 @@
     .find { width: 100%; height: var(--h-touch); }
     .find input { font-size: 16px; }
     .kbd, .tail .btn { display: none; }
-    .hero { padding-block: 40px 40px; }
+    .intro { padding-block: 40px 40px; }
     h1 { font-size: 34px; }
     .chips { margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); mask-image: linear-gradient(90deg, #000 calc(100% - 64px), transparent); }
     .chip { height: 38px; padding: 0 16px; }
@@ -247,6 +261,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     * { transition-duration: 0.01ms !important; animation: none !important; }
+    .eye b { translate: none; }
   }
 </style>
 </head>
@@ -280,10 +295,11 @@
 <header class="bar">
   <div class="wrap">
     <div class="lead">
-      <a class="mark" href="#top" aria-label="Toolbox, back to top"><i></i><span>Toolbox</span></a>
+      <a class="mark" href="#top" aria-label="Toolbox, back to top"><span class="head" aria-hidden="true"><span class="eye"><b></b></span><span class="eye"><b></b></span></span><span>Toolbox</span></a>
       <nav class="nav" aria-label="Sections">
         <a href="#tools" aria-current="true">Tools</a>
         <a href="#plugins">Plugins</a>
+        <a href="#skills">Skills</a>
       </nav>
     </div>
     <label class="find" for="q">
@@ -303,10 +319,10 @@
 
 <main class="wrap" id="top">
 
-  <div class="hero">
-    <span class="count"><b></b>10 tools · 5 plugins</span>
+  <div class="intro">
+    <span class="count"><b></b>10 tools · 3 plugins · 2 skills</span>
     <h1>Toolbox</h1>
-    <p class="lede">Small, sharp <b>tools for design work</b> and <b>Framer plugins</b>. Free, open source, no accounts.</p>
+    <p class="lede">Small, sharp <b>tools for design work</b>, <b>Framer plugins</b> and <b>Claude Code skills</b>. Free, open source, no accounts.</p>
     <div class="row">
       <a class="btn hero" href="#tools">Browse the tools</a>
       <a class="btn quiet" href="https://github.com/granqvistsanna-web">Source on GitHub</a>
@@ -402,8 +418,8 @@
   </section>
 
   <section id="plugins">
-    <div class="sh"><h2>Plugins</h2><span id="pcount">5</span></div>
-    <div class="plist" id="plist">
+    <div class="sh"><h2>Plugins</h2><span class="n">3</span></div>
+    <div class="plist">
       <a class="prow" href="https://github.com/granqvistsanna-web/bandwidth-plugin">
         <svg class="i"><use href="#i-gauge"/></svg>
         <span class="pt"><span class="pname">Bandwidth</span><span class="pdesc">Page-weight analysis — flags heavy assets and suggests fixes</span></span>
@@ -422,6 +438,12 @@
         <span class="pkind">Framer</span>
         <svg class="i parrow"><use href="#i-arrow"/></svg>
       </a>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sh"><h2>Skills</h2><span class="n">2</span></div>
+    <div class="plist">
       <a class="prow" href="https://github.com/granqvistsanna-web/framer-audit-plugin">
         <svg class="i"><use href="#i-scan"/></svg>
         <span class="pt"><span class="pname">Framer Audit</span><span class="pdesc">Read-only design-QA audit with suggested fixes</span></span>
@@ -449,6 +471,21 @@
   (function () {
     var root = document.documentElement;
 
+    // mascot: the pupils look toward the pointer, at most 1.6px off centre
+    var head = document.querySelector(".head"), pupils = document.querySelectorAll(".eye b"), frame = 0, px = 0, py = 0;
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      document.addEventListener("pointermove", function (e) {
+        px = e.clientX; py = e.clientY;
+        if (frame) return;
+        frame = requestAnimationFrame(function () {
+          frame = 0;
+          var r = head.getBoundingClientRect(), dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height / 2);
+          var d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 120) * 1.6;
+          pupils.forEach(function (p) { p.style.setProperty("--px", (dx / d * k).toFixed(2) + "px"); p.style.setProperty("--py", (dy / d * k).toFixed(2) + "px"); });
+        });
+      }, { passive: true });
+    }
+
     // theme
     document.querySelector(".theme").addEventListener("click", function () {
       root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
@@ -458,7 +495,6 @@
     // filter: chips by kind, search by name and description, both at once
     var q = document.getElementById("q"), kind = "";
     var cards = [].slice.call(document.querySelectorAll(".card"));
-    var rows = [].slice.call(document.querySelectorAll(".prow"));
     var empty = document.getElementById("empty");
     function text(el) { return el.textContent.toLowerCase(); }
     function apply() {
@@ -467,10 +503,12 @@
         var on = (!kind || c.dataset.kind === kind) && (!term || text(c).indexOf(term) > -1);
         c.hidden = !on; if (on) shown++;
       });
-      var pshown = 0;
-      rows.forEach(function (r) { var on = !term || text(r).indexOf(term) > -1; r.hidden = !on; if (on) pshown++; });
-      document.getElementById("pcount").textContent = pshown;
-      document.getElementById("plugins").hidden = !pshown;
+      ["plugins", "skills"].forEach(function (id) {
+        var sec = document.getElementById(id), n = 0;
+        sec.querySelectorAll(".prow").forEach(function (r) { var on = !term || text(r).indexOf(term) > -1; r.hidden = !on; if (on) n++; });
+        sec.querySelector(".sh .n").textContent = n;
+        sec.hidden = !n;
+      });
       empty.hidden = shown > 0;
       document.getElementById("empty-q").textContent = term || kind;
     }
@@ -500,7 +538,7 @@
         links.forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + e.target.id); });
       });
     }, { rootMargin: "-45% 0px -45% 0px" });
-    ["tools", "plugins"].forEach(function (id) { io.observe(document.getElementById(id)); });
+    ["tools", "plugins", "skills"].forEach(function (id) { io.observe(document.getElementById(id)); });
   })();
 </script>
 
