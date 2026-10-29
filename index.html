@@ -110,15 +110,9 @@
   .btn.quiet:hover { opacity: 1; background: var(--wash-2); }
 
   /* ---- Hero ---- */
-  .intro { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 64px 56px; }
+  .intro { text-align: center; display: grid; justify-items: center; gap: var(--s-7); padding-block: 136px 112px; }
   .intro > * { animation: rise var(--t-rise) var(--rise) both; }
   @keyframes rise { from { opacity: 0; translate: 0 10px; } }
-  .count {
-    height: 32px; padding: 0 14px; border-radius: var(--r-pill); box-shadow: var(--ring);
-    display: inline-flex; align-items: center; gap: var(--s-4);
-    font: 500 14px/1 var(--font-ui); color: var(--ink); font-variant-numeric: tabular-nums;
-  }
-  .count b { width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 20%, transparent); }
   h1 { margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; color: var(--ink); }
   .lede { margin: 0; max-width: 46ch; font-size: 16px; line-height: 1.55; color: var(--ink-4); text-wrap: balance; }
   .lede b { font-weight: 400; color: var(--ink); }
@@ -197,7 +191,6 @@
   section { padding-top: 56px; }
   .sh { display: flex; align-items: baseline; gap: var(--s-6); margin-bottom: var(--s-8); }
   .sh h2 { margin: 0; font-size: 26px; line-height: 1.2; font-weight: 500; letter-spacing: -.01em; color: var(--ink); }
-  .sh .n { font-size: 14px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
 
   /* ---- Plugins: a menu-like list ---- */
   .plist { max-width: 760px; padding: 4px; border-radius: var(--r-menu); background: var(--wash); display: grid; gap: 2px; }
@@ -234,7 +227,7 @@
     .find { width: 100%; height: var(--h-touch); }
     .find input { font-size: 16px; }
     .kbd, .tail .btn { display: none; }
-    .intro { padding-block: 40px 40px; }
+    .intro { padding-block: 80px 64px; }
     h1 { font-size: 34px; }
     .chips { margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); mask-image: linear-gradient(90deg, #000 calc(100% - 64px), transparent); }
     .chip { height: 38px; padding: 0 16px; }
@@ -303,7 +296,6 @@
 <main class="wrap" id="top">
 
   <div class="intro">
-    <span class="count"><b></b>10 tools · 3 plugins · 2 skills</span>
     <h1>Toolbox</h1>
     <p class="lede">Small, sharp <b>tools for design work</b>, <b>Framer plugins</b> and <b>Claude Code skills</b>. Free, open source, no accounts.</p>
   </div>
@@ -354,13 +346,6 @@
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
-      <article class="card" data-kind="system">
-        <span class="tag">Design system</span>
-        <a class="tool src" href="https://github.com/granqvistsanna-web/graphite-console" aria-label="Graphite Console source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
-        <div class="face"><span class="knob"><svg class="i"><use href="#i-layers"/></svg></span><p>A monochrome, dark-only design system. One grey ladder, white as the only accent.</p></div>
-        <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/graphite-console/">Graphite Console</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
-      </article>
-
       <article class="card" data-kind="cli">
         <span class="tag">CLI · Node</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
@@ -397,7 +382,7 @@
   </section>
 
   <section id="plugins">
-    <div class="sh"><h2>Plugins</h2><span class="n">3</span></div>
+    <div class="sh"><h2>Plugins</h2></div>
     <div class="plist">
       <a class="prow" href="https://github.com/granqvistsanna-web/bandwidth-plugin">
         <svg class="i"><use href="#i-gauge"/></svg>
@@ -421,7 +406,7 @@
   </section>
 
   <section id="skills">
-    <div class="sh"><h2>Skills</h2><span class="n">2</span></div>
+    <div class="sh"><h2>Skills</h2></div>
     <div class="plist">
       <a class="prow" href="https://github.com/granqvistsanna-web/framer-audit-plugin">
         <svg class="i"><use href="#i-scan"/></svg>
@@ -470,7 +455,6 @@
       ["plugins", "skills"].forEach(function (id) {
         var sec = document.getElementById(id), n = 0;
         sec.querySelectorAll(".prow").forEach(function (r) { var on = !term || text(r).indexOf(term) > -1; r.hidden = !on; if (on) n++; });
-        sec.querySelector(".sh .n").textContent = n;
         sec.hidden = !n;
       });
       empty.hidden = shown > 0;
