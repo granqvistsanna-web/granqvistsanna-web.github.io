@@ -236,8 +236,21 @@
   @media (max-width: 760px) {
     .bar .wrap { height: 62px; gap: var(--s-5); }
     .mark span { display: none; }
-    .find { width: 100%; height: var(--h-touch); }
-    .find input { font-size: 16px; }
+    /* Pumice opening search: a round button beside the theme toggle that opens over the bar as one object */
+    .bar .wrap { position: relative; }
+    .tail { grid-column: 3; }
+    .find {
+      position: absolute; z-index: 1; top: 50%; translate: 0 -50%;
+      right: calc(max(var(--gutter), env(safe-area-inset-right, 0px)) + var(--h-touch) + var(--s-4));
+      width: var(--h-touch); height: var(--h-touch); padding: 0 0 0 14px; gap: 0; cursor: pointer;
+      transition: width var(--t-open) var(--spring-soft), padding var(--t-open) var(--spring-soft), gap var(--t-open) var(--spring-soft), background var(--t-color), box-shadow var(--t-color);
+    }
+    .find input { width: 0; flex: 1 1 0; opacity: 0; font-size: 16px; transition: opacity var(--t-fade); }
+    .find:is(:focus-within, :has(input:not(:placeholder-shown))) {
+      width: calc(100% - 2 * max(var(--gutter), env(safe-area-inset-left, 0px)) - var(--h-touch) - var(--s-4));
+      padding: 0 14px; gap: var(--s-4); cursor: text;
+    }
+    .find:is(:focus-within, :has(input:not(:placeholder-shown))) input { opacity: 1; transition-delay: 90ms; }
     .kbd, .tail .btn { display: none; }
     .intro { padding-block: 80px 64px; }
     h1 { font-size: 34px; }
