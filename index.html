@@ -162,33 +162,32 @@
     font-size: 14px; line-height: 1.45; color: var(--ink-3); text-wrap: pretty; }
   .card { background: var(--wash); transition: background var(--t-color); }
   .card:hover { background: var(--wash-2); }
-  /* Each tool shows one piece of its own interface, close up: drawn at true size, then doubled and
-     cropped by the card edge. Pictures are content, so they keep their colour; everything else is Pumice. */
+  /* Each tool shows one piece of its own interface, whole and centred, a little larger than life.
+     Pictures are content, so they keep their colour; everything else is Pumice. */
   .art { position: absolute; inset: 96px 0 0; overflow: hidden; }
-  .ui { position: absolute; left: 56px; top: 36px; display: grid; place-items: center; scale: 1.9; transform-origin: 0 0;
+  .ui { position: absolute; left: 50%; top: 46%; display: grid; place-items: center; scale: 1.35; translate: -50% -50%;
     transition: translate var(--t-move) var(--spring); }
   .ui > * { grid-area: 1 / 1; }
-  .wide .ui { left: 30%; top: 26px; }
-  @media (max-width: 600px) { .ui { scale: 1.6; left: 40px; } }
-  .card:hover .ui, .card:focus-within .ui { translate: -6px -8px; }
+  .wide .ui { scale: 1.6; }
+  @media (max-width: 600px) { .ui, .wide .ui { scale: .95; } }
+  .card:hover .ui, .card:focus-within .ui { translate: calc(-50% - 6px) calc(-50% - 8px); }
   .panel { background: var(--elev); box-shadow: var(--lift); border-radius: 18px; }
   .pill { height: 40px; padding: 0 18px; border-radius: var(--r-pill); display: inline-flex; align-items: center; gap: 8px; font: 500 14px/1 var(--font-ui); white-space: nowrap; }
   .pill.ink { background: var(--ink); color: var(--on-ink); }
   .pill.quiet { background: var(--wash-2); color: var(--ink); }
-  .badge { height: 24px; padding: 0 9px; border-radius: var(--r-pill); background: var(--thumb); box-shadow: var(--shadow-1); color: var(--ink);
+  .badge { height: 24px; padding: 0 9px; border-radius: var(--r-pill); background: var(--elev); box-shadow: var(--shadow-1); color: var(--ink);
     display: inline-flex; align-items: center; gap: 5px; font: 500 11px/1 var(--font-ui); white-space: nowrap; }
   .badge.good { color: var(--ok); }
   .ui svg.i { width: 20px; height: 20px; color: var(--ink-4); }
-  .pic { position: relative; display: block; border-radius: 14px; overflow: hidden; box-shadow: var(--lift);
-    background: linear-gradient(#f0a36f, #e8794f 45%, #f6c8a0); }
-  .pic.photo { background: url(shots/webp-sample.jpg) 50% 40% / cover; }
+  .pic { position: relative; display: block; border-radius: 14px; overflow: hidden; box-shadow: var(--lift); }
+  .pic { background: var(--wash-2) url(shots/webp-sample.jpg) var(--at, 50% 40%) / cover; }
   .dots { display: flex; gap: 6px; }
   .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--wash-2); }
   /* Colourbook: a palette, one swatch just copied */
   .pal { display: flex; padding: 8px; gap: 6px; }
   .pal i { width: 44px; height: 112px; border-radius: 12px; background: var(--c); }
   .pal i:first-child { outline: 2px solid var(--signal); outline-offset: 2px; }
-  .copied { translate: 20px 44px; }
+  .copied { translate: 46px 78px; }
   /* WebP: the same picture, heavy then light */
   .conv { display: flex; align-items: center; gap: 16px; }
   .conv .badge { position: absolute; left: 8px; top: 8px; }
@@ -216,7 +215,7 @@
   .term { width: 270px; padding: 14px 16px 16px; display: grid; gap: 8px; font: 12.5px/1.4 var(--font-code); color: var(--ink); }
   .term .dots { margin-bottom: 4px; }
   .term .ok { color: var(--ok); }
-  .shotout { width: 96px; height: 64px; translate: 50px 40px; rotate: 4deg; }
+  .shotout { width: 96px; height: 64px; translate: 100px 60px; rotate: 4deg; }
   /* Button Hover Lab: one button, mid-hover */
   .hov { height: 60px; padding: 0 30px; font-size: 18px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 22%, transparent); }
   .hov svg.i { color: inherit; }
@@ -240,8 +239,26 @@
   .who em { font-style: normal; width: 14px; color: var(--ok); }
   .who .no em { color: var(--ink-5); }
   .rings { padding: 16px 18px; display: flex; gap: 14px; }
-  .rings > span { display: grid; justify-items: center; gap: 6px; font: 500 10.5px/1 var(--font-ui); color: var(--ink-4); }
+  .rings > span { display: grid; justify-items: center; gap: 6px; font: 500 10.5px/1 var(--font-ui); color: var(--ink-4); white-space: nowrap; }
   .rings .score { --d: 52px; --c: var(--ok); }
+  /* Slight motion: one slow loop per graphic, each about what the tool does. Off for reduced motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .copied, .phone, .cur, .shotout { animation: bob 3.2s ease-in-out infinite alternate; }
+    .phone { animation-delay: -.8s; } .cur { animation-delay: -1.6s; } .shotout { animation-delay: -2.4s; }
+    .conv svg.i { animation: nudge 1.6s ease-in-out infinite alternate; }
+    .track i { animation: play 7s linear infinite; }
+    .switch::after { animation: toggle 4s var(--settle) infinite; }
+    .slider i { animation: drag 5s ease-in-out infinite; }
+    .score .fg { animation: draw 7s var(--rise) infinite; }
+    .hov { animation: pulse 2.4s ease-in-out infinite; }
+  }
+  @keyframes bob { to { transform: translateY(-5px); } }
+  @keyframes nudge { to { translate: 4px 0; } }
+  @keyframes play { from { width: 6%; } to { width: 96%; } }
+  @keyframes toggle { 0%, 40% { transform: none; } 50%, 90% { transform: translateX(-22px); } }
+  @keyframes drag { 50% { right: 22%; } }
+  @keyframes draw { 0% { stroke-dasharray: 0 999; } 30%, 100% { stroke-dasharray: calc(var(--n) * 1.948) 999; } }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--signal) 14%, transparent); } }
   /* Mockup: a browser window, a phone in front */
   .browser { width: 236px; padding: 6px; }
   .browser .dots { margin: 4px 4px 8px; }
@@ -416,7 +433,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="conv"><span class="pic photo big"><span class="badge">PNG · 2.4 MB</span></span><svg class="i"><use href="#i-arrow"/></svg><span class="pic photo sm"><span class="badge good">WebP · 380 KB</span></span></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="conv"><span class="pic big"><span class="badge">PNG · 2.4 MB</span></span><svg class="i"><use href="#i-arrow"/></svg><span class="pic sm"><span class="badge good">WebP · 380 KB</span></span></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -424,7 +441,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/video-compressor" aria-label="Video Compressor source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel player"><span class="pic screen"><span class="play"></span></span><div class="track"><i></i></div><div class="vmeta"><s>48.2 MB</s><span class="badge good">MP4 · 5.9 MB</span></div></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel player"><span class="pic screen" style="--at:50% 62%"><span class="play"></span></span><div class="track"><i></i></div><div class="vmeta"><s>48.2 MB</s><span class="badge good">MP4 · 5.9 MB</span></div></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -448,7 +465,7 @@
         <span class="tag">CLI · Node</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div><span class="pic shotout"></span></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div><span class="pic shotout" style="--at:50% 20%"></span></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -472,7 +489,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/mockup" aria-label="Mockup source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in screenshots, get browser and phone mockups out, with Framer thumbnail templates.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel browser"><span class="dots"><i></i><i></i><i></i></span><span class="pic"></span></div><div class="panel phone"><span class="pic"></span></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel browser"><span class="dots"><i></i><i></i><i></i></span><span class="pic" style="--at:50% 55%"></span></div><div class="panel phone"><span class="pic" style="--at:48% 30%"></span></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/mockup/">Mockup</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
