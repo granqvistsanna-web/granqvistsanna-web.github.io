@@ -167,82 +167,71 @@
     font-size: var(--fs-ui); line-height: var(--lh-ui); color: var(--ink-3); text-wrap: pretty; }
   .card { background: var(--wash); transition: background var(--t-color); }
   .card:hover { background: var(--wash-2); }
-  /* Each tool shows one piece of its own interface, whole and centred, a little larger than life.
-     Pictures are content, so they keep their colour; everything else is Pumice. */
+  /* Each tool shows one piece of its own interface, whole and centred, about life size.
+     No photos: plain washes stand in for pictures, so every card is Pumice. */
   .art { position: absolute; inset: 96px 0 0; overflow: hidden; }
-  .ui { position: absolute; left: 50%; top: 44%; display: grid; place-items: center; scale: 1.35; translate: -50% -50%;
+  .ui { position: absolute; left: 50%; top: 44%; display: grid; place-items: center; scale: 1.1; translate: -50% -50%;
     transition: translate var(--t-move) var(--spring); }
   .ui > * { grid-area: 1 / 1; }
-  .wide .ui { scale: 1.6; }
+  .wide .ui { scale: 1.25; }
   /* the graphic follows the card's width, not the window's, so it keeps the same margin in every column count */
-  @container (max-width: 899px) { .wide .ui { scale: 1.35; } }
-  @container (max-width: 799px) { .wide .ui { scale: 1.15; } }
-  @container (max-width: 439px) { .card .ui { scale: 1.15; } }
-  @container (max-width: 379px) { .card .ui { scale: 1; } }
+  @container (max-width: 899px) { .wide .ui { scale: 1.1; } }
+  @container (max-width: 799px) { .wide .ui { scale: 1; } }
+  @container (max-width: 439px) { .card .ui { scale: 1; } }
+  @container (max-width: 379px) { .card .ui { scale: .9; } }
   .card:hover .ui, .card:focus-within .ui { translate: calc(-50% - 6px) calc(-50% - 8px); }
   .panel { background: var(--elev); box-shadow: var(--lift); border-radius: 18px; }
   :root[data-theme="dark"] :is(.panel, .badge) { background-image: linear-gradient(var(--wash), var(--wash)); }
   .pill { height: var(--h-button); padding: 0 18px; border-radius: var(--r-pill); display: inline-flex; align-items: center; gap: var(--s-4); font: var(--fw-medium) var(--fs-ui)/1 var(--font-ui); white-space: nowrap; }
   .pill.ink { background: var(--ink); color: var(--on-ink); }
-  .pill.quiet { background: var(--wash-2); color: var(--ink); }
   .badge { height: var(--h-tag); padding: 0 9px; border-radius: var(--r-pill); background: var(--elev); box-shadow: var(--shadow-1); color: var(--ink);
     display: inline-flex; align-items: center; gap: 5px; font: var(--fw-medium) var(--fs-tag)/1 var(--font-ui); white-space: nowrap; }
   .badge.good { color: var(--ok); }
   .ui svg.i { width: 20px; height: 20px; color: var(--ink-4); }
-  .pic { position: relative; display: block; border-radius: 14px; overflow: hidden; box-shadow: var(--lift); }
-  .pic { background: var(--wash-2) url(shots/webp-sample.jpg) var(--at, 50% 40%) / cover; }
+  /* where a tool would show a picture, a plain wash stands in */
+  .blank { display: block; border-radius: 10px; background: var(--wash-2); }
   .dots { display: flex; gap: 6px; }
   .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--wash-2); }
   /* Colourbook: a palette, one swatch just copied */
   .pal { display: flex; padding: 10px; gap: 6px; }
-  .pal i { width: 44px; height: 112px; border-radius: 12px; background: var(--c); }
+  .pal i { width: 36px; height: 88px; border-radius: 10px; background: var(--c); }
   .pal i:first-child { outline: 2px solid var(--signal); outline-offset: 2px; }
   .copied { translate: -60px 76px; }
   /* WebP: the same picture, heavy then light */
   .conv { display: flex; align-items: center; gap: 16px; }
-  .conv .badge { position: absolute; left: 8px; top: 8px; }
-  .conv svg.i { rotate: 45deg; }
-  .conv .big { width: 120px; height: 160px; }
-  .conv .sm { width: 60px; height: 80px; overflow: visible; }
+  .file { position: relative; display: grid; place-items: center; }
+  .file .badge { position: absolute; left: 50%; bottom: -11px; translate: -50% 0; }
+  .conv > svg.i { rotate: 45deg; }
+  .conv .big { width: 112px; height: 136px; }
+  .conv .big svg.i { width: 32px; height: 32px; }
+  .conv .sm { width: 72px; height: 88px; }
   /* Video Compressor: a player, and the file it made */
   .player { width: 250px; padding: 8px; }
-  .screen { height: 112px; border-radius: 12px; display: grid; place-items: center; box-shadow: none; }
-  .play { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.9); display: grid; place-items: center; }
-  .play::after { content: ""; width: 14px; height: 16px; margin-left: 3px; background: #17181a; clip-path: polygon(0 0, 100% 50%, 0 100%); }
+  .screen { height: 112px; display: grid; place-items: center; }
+  .play { width: 40px; height: 40px; border-radius: 50%; background: var(--elev); box-shadow: var(--shadow-1); display: grid; place-items: center; }
+  .play::after { content: ""; width: 14px; height: 16px; margin-left: 3px; background: var(--ink); clip-path: polygon(0 0, 100% 50%, 0 100%); }
   .track { height: 4px; margin: 12px 6px 10px; border-radius: 2px; background: var(--wash-2); }
   .track i { display: block; width: 62%; height: 100%; border-radius: inherit; background: var(--signal); }
   .vmeta { display: flex; justify-content: space-between; align-items: center; padding: 0 6px 4px; font: var(--fw-medium) var(--fs-caption)/1 var(--font-ui); color: var(--ink-4); }
-  /* Pumice: a handful of its own controls */
-  .kit { display: grid; gap: 12px; justify-items: center; }
-  .kit .row { display: flex; gap: 10px; align-items: center; }
-  .seg { display: flex; padding: 3px; border-radius: var(--r-pill); background: var(--wash-2); }
-  .seg i { height: 32px; padding: 0 14px; border-radius: var(--r-pill); display: grid; place-items: center; font: var(--fw-medium) var(--fs-small)/1 var(--font-ui); font-style: normal; color: var(--ink-3); }
-  .seg i.on { background: var(--thumb); color: var(--ink); box-shadow: var(--shadow-1); }
-  .switch { width: 52px; height: 30px; border-radius: var(--r-pill); background: var(--signal); position: relative; }
-  .switch::after { content: ""; position: absolute; top: 3px; right: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); }
-  .field { width: 230px; height: 40px; border-radius: var(--r-pill); display: flex; align-items: center; padding: 0 var(--s-7); font-size: var(--fs-ui); color: var(--ink-4); }
-  /* Frameshot: the command, and the shot it made */
+  /* Pumice: its logo, an ink tile holding one pill */
+  .logo { width: 112px; aspect-ratio: 1; border-radius: 35px; background: var(--ink); display: grid; place-items: center; box-shadow: var(--lift); }
+  .logo::after { content: ""; width: 56px; height: 21px; border-radius: var(--r-pill); background: var(--on-ink); }
+  /* Frameshot: the command and what it made */
   .term { width: 270px; padding: 14px 16px 16px; display: grid; gap: 8px; font: var(--fs-mono)/1.4 var(--font-code); color: var(--ink); }
   .term .dots { margin-bottom: 4px; }
   .term .ok { color: var(--ok); }
-  .shotout { width: 96px; height: 64px; translate: 100px 60px; rotate: 4deg; }
-  /* Button Hover Lab: one button, mid-hover */
-  .hrow { display: flex; align-items: center; gap: var(--s-7); }
-  .pill.line { box-shadow: inset 0 0 0 1px var(--line-ctl); color: var(--ink); }
-  .side { width: 124px; justify-content: center; }
-  /* in a card too narrow for the row, only the hovered button stays */
-  @container (max-width: 699px) { .side { display: none; } }
-  .hov { height: 52px; padding: 0 26px; font-size: var(--fs-lead); box-shadow: 0 0 0 6px color-mix(in srgb, var(--signal) 22%, transparent); }
-  .hov svg.i { color: inherit; }
+  /* Button Hover Lab: its Swell button; on hover the plate grows and the label rolls */
+  .swell { height: 52px; padding: 0 26px; font-size: var(--fs-lead); transition: scale var(--t-move) var(--spring); }
+  .roll { display: block; height: 1.25em; line-height: 1.25; overflow: hidden; }
+  .roll span { display: block; transition: translate var(--t-move) var(--spring); }
+  .card:is(:hover, :focus-within) .swell { scale: 1.03; }
+  .card:is(:hover, :focus-within) .roll span { translate: 0 -100%; }
   .cur { width: 26px; height: 26px; translate: 76px 14px; fill: #fff; stroke: #17181a; stroke-width: 1.5; stroke-linejoin: round; }
   /* Rate & Pricing: a rate and the slider that sets it */
   .calc { width: 250px; padding: 18px 18px 20px; display: grid; gap: 6px; }
   .calc small { font-size: var(--fs-caption); color: var(--ink-4); }
   .calc b { font: 500 34px/1.1 var(--font-ui); color: var(--ink); letter-spacing: -.02em; }
   .calc b span { font-size: var(--fs-body); color: var(--ink-4); font-weight: var(--fw-regular); }
-  .quote { display: flex; justify-content: space-between; margin-top: var(--s-8); padding-top: var(--s-6); border-top: 1px solid var(--hairline);
-    font: var(--fw-medium) var(--fs-caption)/1 var(--font-ui); color: var(--ink-4); }
-  .calc .quote b { font: inherit; color: var(--ink); letter-spacing: 0; }
   .slider { position: relative; height: 4px; margin-top: 14px; border-radius: 2px; background: var(--wash-2); }
   .slider i { position: absolute; inset: 0 40% 0 0; border-radius: inherit; background: var(--signal); }
   .slider i::after { content: ""; position: absolute; right: -10px; top: -8px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: var(--shadow-1), 0 2px 6px rgba(0,0,0,.15); }
@@ -250,7 +239,7 @@
   .score { position: relative; width: var(--d, 72px); aspect-ratio: 1; flex: none; display: grid; place-items: center; font: 600 calc(var(--d, 72px) * .3)/1 var(--font-ui); color: var(--ink); }
   .score svg { position: absolute; inset: 0; rotate: -90deg; fill: none; stroke-width: 6; stroke-linecap: round; }
   .score .bg { stroke: var(--wash-2); }
-  .score .fg { stroke: var(--c, var(--signal)); stroke-dasharray: calc(var(--n) * 1.948) 999; }
+  .score .fg { stroke: var(--c, var(--signal)); stroke-dasharray: calc(var(--n) * 1.948px) 999px; }
   .aeo { width: 250px; padding: 8px 8px 18px; display: grid; gap: var(--s-7); }
   .aeo .res { display: flex; gap: var(--s-7); align-items: center; padding: 0 10px; }
   .url { height: 34px; padding: 0 var(--s-6); border-radius: var(--r-pill); background: var(--wash); display: flex; align-items: center; gap: var(--s-3);
@@ -263,30 +252,25 @@
   .rings { padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6) var(--s-8); }
   .rings > span { display: grid; justify-items: center; gap: 6px; font: var(--fw-medium) var(--fs-tag)/1 var(--font-ui); color: var(--ink-4); white-space: nowrap; }
   .rings .score { --d: 48px; --c: var(--ok); }
-  /* Slight motion: one slow loop per graphic, each about what the tool does. Off for reduced motion. */
+  /* Still at rest; on hover or focus each graphic plays one slow loop about what the tool does. Off for reduced motion. */
   @media (prefers-reduced-motion: no-preference) {
-    .copied, .phone, .cur, .shotout { animation: bob 3.2s ease-in-out infinite alternate; }
-    .phone { animation-delay: -.8s; } .cur { animation-delay: -1.6s; } .shotout { animation-delay: -2.4s; }
-    .conv svg.i { animation: nudge 1.6s ease-in-out infinite alternate; }
-    .track i { animation: play 7s linear infinite; }
-    .switch::after { animation: toggle 4s var(--settle) infinite; }
-    .slider i { animation: drag 5s ease-in-out infinite; }
-    .score .fg { animation: draw 7s var(--rise) infinite; }
-    .hov { animation: pulse 2.4s ease-in-out infinite; }
+    .card:is(:hover, :focus-within) :is(.copied, .phone, .cur) { animation: bob 3.2s ease-in-out infinite alternate; }
+    .card:is(:hover, :focus-within) .conv > svg.i { animation: nudge 1.6s ease-in-out infinite alternate; }
+    .card:is(:hover, :focus-within) .track i { animation: play 7s linear infinite; }
+    .card:is(:hover, :focus-within) .slider i { animation: drag 5s ease-in-out infinite; }
+    .card:is(:hover, :focus-within) .score .fg { animation: draw 7s var(--rise) infinite; }
   }
   @keyframes bob { to { transform: translateY(-5px); } }
   @keyframes nudge { to { translate: 4px 0; } }
   @keyframes play { from { width: 6%; } to { width: 96%; } }
-  @keyframes toggle { 0%, 40% { transform: none; } 50%, 90% { transform: translateX(-22px); } }
   @keyframes drag { 50% { right: 22%; } }
-  @keyframes draw { 0% { stroke-dasharray: 0 999; } 30%, 100% { stroke-dasharray: calc(var(--n) * 1.948) 999; } }
-  @keyframes pulse { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--signal) 14%, transparent); } }
+  @keyframes draw { 0% { stroke-dasharray: 0 999; } 30%, 100% { stroke-dasharray: calc(var(--n) * 1.948px) 999px; } }
   /* Mockup: a browser window, a phone in front */
   .browser { width: 236px; padding: 6px; }
   .browser .dots { margin: 4px 4px 8px; }
-  .browser .pic { height: 128px; border-radius: 10px; box-shadow: none; }
+  .browser .blank { height: 128px; }
   .phone { width: 74px; height: 150px; padding: 5px; border-radius: 20px; translate: 64px 20px; }
-  .phone .pic { height: 100%; border-radius: 15px; box-shadow: none; }
+  .phone .blank { height: 100%; border-radius: 15px; }
   .foot { position: absolute; z-index: 2; left: var(--s-6); right: var(--s-6); bottom: var(--s-6); display: flex; align-items: center; justify-content: space-between; gap: var(--s-4); }
   .name {
     height: var(--h-field); padding: 0 14px; border-radius: var(--r-pill);
@@ -393,6 +377,7 @@
   <symbol id="i-timer" viewBox="0 0 24 24"><path d="M10 2h4"/><path d="m12 14 3-3"/><circle cx="12" cy="14" r="8"/></symbol>
   <symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></symbol>
   <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
   <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
@@ -485,7 +470,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/image-compressor" aria-label="WebP Converter source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in PNGs and JPGs, get lean WebP files out. Runs in your browser.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="conv"><span class="pic big"><span class="badge">PNG · 2.4 MB</span></span><svg class="i"><use href="#i-arrow"/></svg><span class="pic sm"><span class="badge good">WebP · 380 KB</span></span></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="conv"><span class="panel file big"><svg class="i"><use href="#i-image"/></svg><span class="badge">PNG</span></span><svg class="i"><use href="#i-arrow"/></svg><span class="panel file sm"><svg class="i"><use href="#i-image"/></svg><span class="badge good">WebP</span></span></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/image-compressor/">WebP Converter</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -493,7 +478,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/video-compressor" aria-label="Video Compressor source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in a video loop, get a lean MP4 out, sized for the web. Runs in your browser.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel player"><span class="pic screen" style="--at:50% 62%"><span class="play"></span></span><div class="track"><i></i></div><div class="vmeta"><s>48.2 MB</s><span class="badge good">MP4 · 5.9 MB</span></div></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel player"><span class="blank screen"><span class="play"></span></span><div class="track"><i></i></div><div class="vmeta"><span>MP4</span><span class="badge good">5.9 MB</span></div></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/video-compressor/">Video Compressor</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -501,7 +486,7 @@
         <span class="tag">CLI · Node</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/frameshot" aria-label="Frameshot source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Clean, retina screenshots of Framer sites. A local CLI on Node and Playwright.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div><span class="pic shotout" style="--at:50% 20%"></span></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel term"><span class="dots"><i></i><i></i><i></i></span><span>$ npx frameshot site.framer.app</span><span class="ok">✓ 6 shots · 2x · 1.4 s</span></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/frameshot/">Frameshot</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -509,7 +494,7 @@
         <span class="tag">Design system</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pumice" aria-label="Pumice source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">The soft, warm-grey design system this page is set in. Pills, panels, springy motion.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="kit"><div class="row"><span class="pill ink">Use the tokens</span><span class="pill quiet">Source</span></div><div class="row"><span class="seg"><i class="on">Light</i><i>Dark</i></span><span class="switch"></span></div><span class="panel field">Search tokens…</span></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><span class="logo"></span></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pumice/">Pumice</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -517,7 +502,7 @@
         <span class="tag">Reference</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/button-hover-lab" aria-label="Button Hover Lab source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Button hover animations you can hover, tab and press, with notes on porting each to Framer.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="hrow"><span class="pill quiet side">Learn more</span><span class="pill ink hov">Start the trial <svg class="i"><use href="#i-arrow"/></svg></span><span class="pill line side">Book a call</span></div><svg class="cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><span class="pill ink swell"><span class="roll"><span>Start the trial</span><span>Start the trial</span></span></span><svg class="cur" viewBox="0 0 24 24"><path d="M4 2.5 20 11l-7 1.8L9.6 20z"/></svg></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/button-hover-lab/">Button Hover Lab</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -525,7 +510,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/pricing" aria-label="Rate and Pricing Calculator source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Work out a freelance hourly rate and sanity-check any project quote.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel calc"><small>Your hourly rate</small><b>850 <span>kr / h</span></b><div class="slider"><i></i></div><div class="quote"><span>Project · 40 h</span><b>34 000 kr</b></div></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel calc"><small>Your hourly rate</small><b>850 <span>kr / h</span></b><div class="slider"><i></i></div></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/pricing/">Rate &amp; Pricing Calculator</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
@@ -541,7 +526,7 @@
         <span class="tag">Web app</span>
         <a class="tool src" href="https://github.com/granqvistsanna-web/mockup" aria-label="Mockup source on GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         <p class="desc">Drop in screenshots, get browser and phone mockups out, with Framer thumbnail templates.</p>
-        <div class="art" aria-hidden="true"><div class="ui"><div class="panel browser"><span class="dots"><i></i><i></i><i></i></span><span class="pic" style="--at:50% 55%"></span></div><div class="panel phone"><span class="pic" style="--at:48% 30%"></span></div></div></div>
+        <div class="art" aria-hidden="true"><div class="ui"><div class="panel browser"><span class="dots"><i></i><i></i><i></i></span><span class="blank"></span></div><div class="panel phone"><span class="blank"></span></div></div></div>
         <div class="foot"><a class="name" href="https://granqvistsanna-web.github.io/mockup/">Mockup</a><span class="go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span></div>
       </article>
 
